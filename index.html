@@ -1,16 +1,82 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sàn Giao Dịch Vận Tải - Full System & Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
+    <!-- NAVIGATION HEADER (Đã tối ưu chuẩn Responsive Mobile) -->
+    <header class="bg-blue-900 text-white sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-1 sm:gap-4">
+            
+            <!-- 1. Logo (Thu gọn bớt chữ trên điện thoại) -->
+            <div class="flex items-center space-x-2 cursor-pointer shrink-0" onclick="filterListings('all')">
+                <div class="bg-orange-500 p-1.5 sm:p-2 rounded-lg text-white">
+                    <i class="fa-solid fa-truck-fast text-lg sm:text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-sm sm:text-xl font-bold tracking-wide block leading-none">VANTAI247</span>
+                    <span class="hidden sm:block text-xs text-blue-200 mt-0.5">Sàn Giao Dịch Vận Tải</span>
+                </div>
+            </div>
+
+            <!-- 2. Cụm Ví & Các nút chức năng -->
+            <div class="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
+                
+                <!-- Ví tài khoản (Tối ưu gọn gàng trên mobile) -->
+                <div class="bg-blue-950/80 border border-blue-700/50 rounded-full px-2 py-1 sm:px-3 sm:py-1.5 flex items-center space-x-1 sm:space-x-2">
+                    <i class="fa-solid fa-wallet text-amber-400 text-xs sm:text-sm"></i>
+                    <div class="text-[11px] sm:text-xs">
+                        <span class="text-blue-300 hidden sm:block leading-none">Ví khả dụng</span>
+                        <span id="wallet-balance" class="font-bold text-amber-400 text-xs sm:text-sm">100k</span>
+                    </div>
+                    <button onclick="openModal('modal-topup')" class="ml-1 bg-amber-500 hover:bg-amber-600 text-slate-900 text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full transition">
+                        +
+                    </button>
+                </div>
+
+                <!-- Nút Admin Panel (Chỉ hiển thị khi là Admin) -->
+                <button id="btn-admin-panel" onclick="openAdminPanel()" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg shadow-sm transition items-center space-x-1">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span class="hidden sm:inline">Admin</span>
+                </button>
+
+                <!-- Nút Đăng tin (Chỉ hiện dấu + trên Mobile, đầy đủ chữ trên PC) -->
+                <button onclick="checkAuthAndOpenPostModal()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs sm:text-sm px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg shadow-sm transition flex items-center space-x-1">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="hidden sm:inline">Đăng tin</span>
+                </button>
+
+                <!-- 3. Khu vực Đăng nhập / Đăng ký / User -->
+                <div id="auth-section" class="flex items-center border-l border-blue-800 pl-1.5 sm:pl-3">
+                    
+                    <!-- Màn hình chưa đăng nhập -->
+                    <div id="auth-guest" class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm">
+                        <button onclick="openModal('modal-login')" class="font-medium hover:text-orange-400 transition whitespace-nowrap">Đăng nhập</button>
+                        <span class="text-blue-600">|</span>
+                        <button onclick="openModal('modal-register')" class="bg-blue-800 hover:bg-blue-700 font-medium px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg transition whitespace-nowrap">Đăng ký</button>
+                    </div>
+
+                    <!-- Màn hình đã đăng nhập -->
+                    <div id="auth-user" class="hidden items-center space-x-1 sm:space-x-2">
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-orange-500 flex items-center justify-center font-bold text-xs border border-orange-400 text-white" id="user-avatar">
+                            U
+                        </div>
+                        <div class="hidden md:block text-left">
+                            <span id="user-display-name" class="text-sm font-semibold block leading-tight">User</span>
+                            <span id="user-display-role" class="text-[10px] text-blue-300 block">Chủ hàng</span>
+                        </div>
+                        <div class="flex items-center space-x-0.5">
+                            <button onclick="openModal('modal-change-password')" class="text-xs text-blue-200 hover:text-white p-1" title="Đổi mật khẩu">
+                                <i class="fa-solid fa-key"></i>
+                            </button>
+                            <button onclick="handleLogout()" class="text-xs text-red-300 hover:text-red-100 p-1" title="Đăng xuất">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </header>
+
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
     <!-- NAVIGATION HEADER -->
