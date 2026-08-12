@@ -84,43 +84,101 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
-        <!-- Admin Privilege Banner -->
-        <div id="admin-banner" class="hidden bg-purple-900 text-purple-100 p-4 rounded-xl mb-6 shadow-md border border-purple-700 items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <i class="fa-solid fa-shield-halved text-2xl text-amber-400"></i>
-                <div>
-                    <h4 class="font-bold text-sm text-white">Chế độ Quyền Hạn Admin Đang Kích Hoạt</h4>
-                    <p class="text-xs text-purple-200">Bạn có quyền xem tất cả SĐT miễn phí, quản lý danh sách người dùng và xóa các bài đăng vi phạm.</p>
-                </div>
-            </div>
-            <button onclick="openAdminPanel()" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold text-xs px-3 py-2 rounded-lg transition">
-                Mở Bảng Quản Trị
-            </button>
-        </div>
-
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-4 mb-6 gap-4">
+ <!-- MAIN CONTENT AREA (Bố cục 2 cột chuẩn Sàn Giao Dịch Vận Tải) -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+        
+        <!-- TOOLBAR: BỘ LỌC TABS & THÔNG BÁO PHÍ -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 mb-6 gap-4">
+            <!-- Tabs Lọc -->
             <div class="flex space-x-2">
-                <button id="tab-all" onclick="filterListings('all')" class="px-4 py-2 rounded-lg font-medium text-sm transition bg-blue-900 text-white">
+                <button id="tab-all" onclick="filterListings('all')" class="px-4 py-2 rounded-xl font-medium text-sm transition bg-blue-900 text-white shadow-sm">
                     Tất cả tin (<span id="count-all">0</span>)
                 </button>
-                <button id="tab-hang" onclick="filterListings('hang-tim-xe')" class="px-4 py-2 rounded-lg font-medium text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300">
+                <button id="tab-hang" onclick="filterListings('hang-tim-xe')" class="px-4 py-2 rounded-xl font-medium text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300">
                     📦 Hàng Tìm Xe (<span id="count-hang">0</span>)
                 </button>
-                <button id="tab-xe" onclick="filterListings('xe-tim-hang')" class="px-4 py-2 rounded-lg font-medium text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300">
+                <button id="tab-xe" onclick="filterListings('xe-tim-hang')" class="px-4 py-2 rounded-xl font-medium text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300">
                     🚛 Xe Tìm Hàng (<span id="count-xe">0</span>)
                 </button>
             </div>
 
-            <div class="text-xs text-slate-500">
-                <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Phí xem SĐT liên hệ trực tiếp: <span class="font-bold text-orange-600">20.000đ/lần</span>
+            <!-- Mức phí minh bạch -->
+            <div class="text-xs text-slate-500 flex items-center bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200/60 self-start md:self-auto">
+                <i class="fa-solid fa-circle-info text-blue-600 mr-1.5 text-sm"></i>
+                Phí mở khóa SĐT liên hệ trực tiếp: <span class="font-bold text-orange-600 ml-1">20.000đ / lần</span>
             </div>
         </div>
 
-        <div id="listings-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-    </main>
+        <!-- LAYOUT CHÍNH: 2 CỘT (CỘT BÀI ĐĂNG + CỘT WIDGET BÊN PHẢI) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- CỘT TRÁI (2/3 CHIỀU RỘNG): TẬP TRUNG HIỂN THỊ TIN ĐĂNG -->
+            <div class="lg:col-span-2 space-y-4">
+                <!-- Container chứa thẻ tin đăng (Hiển thị 2 cột trên Tablet/Desktop, 1 cột trên Mobile) -->
+                <div id="listings-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- JavaScript sẽ tự động xuất danh sách bài đăng vào đây -->
+                </div>
+            </div>
 
+            <!-- CỘT PHẢI (1/3 CHIỀU RỘNG): WIDGET BẢNG ĐIỀU HƯỚNG & TIỆN ÍCH -->
+            <div class="space-y-5">
+                
+                <!-- Widget 1: Thống Kê Sàn Real-time -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-blue-600"></i> Thống Kê Sàn Hôm Nay
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3 text-center">
+                        <div class="bg-blue-50/80 p-3 rounded-xl border border-blue-100">
+                            <span class="block text-[11px] font-medium text-slate-500">Nhu cầu tìm xe</span>
+                            <span class="text-lg font-bold text-blue-900">1,240+</span>
+                        </div>
+                        <div class="bg-orange-50/80 p-3 rounded-xl border border-orange-100">
+                            <span class="block text-[11px] font-medium text-slate-500">Chuyến xe rỗng</span>
+                            <span class="text-lg font-bold text-orange-600">850+</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Widget 2: Tuyến Đường Phổ Biến (Hot Routes) -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-fire text-orange-500"></i> Tuyến Đường HOT Trong Ngày
+                    </h3>
+                    <div class="space-y-2 text-xs">
+                        <div onclick="filterByRoute('Đà Nẵng', 'Hà Nội')" class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 cursor-pointer transition border border-slate-100">
+                            <span class="font-semibold text-slate-700"><i class="fa-solid fa-location-dot text-red-500 mr-1.5"></i>Đà Nẵng ➔ Hà Nội</span>
+                            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full text-[10px]">142 tin</span>
+                        </div>
+                        <div onclick="filterByRoute('TP.HCM', 'Đà Nẵng')" class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 cursor-pointer transition border border-slate-100">
+                            <span class="font-semibold text-slate-700"><i class="fa-solid fa-location-dot text-red-500 mr-1.5"></i>TP.HCM ➔ Đà Nẵng</span>
+                            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full text-[10px]">98 tin</span>
+                        </div>
+                        <div onclick="filterByRoute('Hà Nội', 'TP.HCM')" class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 cursor-pointer transition border border-slate-100">
+                            <span class="font-semibold text-slate-700"><i class="fa-solid fa-location-dot text-red-500 mr-1.5"></i>Hà Nội ➔ TP.HCM</span>
+                            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full text-[10px]">210 tin</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Widget 3: Hướng Dẫn An Toàn Giao Dịch -->
+                <div class="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl p-5 text-white shadow-sm border border-blue-800">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
+                        <h4 class="font-bold text-sm">Giao Dịch An Toàn</h4>
+                    </div>
+                    <p class="text-xs text-blue-200 leading-relaxed mb-3">
+                        Kiểm tra kỹ hợp đồng vận chuyển và thông tin chủ xe trước khi chuyển cọc hoặc bàn giao hàng hóa.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-xs font-bold text-amber-400 hover:text-amber-300 transition">
+                        Quy định sàn <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
     <!-- ==================== MODALS SYSTEM ==================== -->
 
     <!-- 1. MODAL ĐĂNG NHẬP -->
