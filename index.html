@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sàn Giao Dịch Vận Tải VANTAI247</title>
+    <title>VANTAI247 - Sàn Giao Dịch Vận Tải Trực Tuyến</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -13,7 +15,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col overflow-x-hidden">
 
-    <!-- HEADER (Tối ưu viền di động & trạng thái Đăng nhập) -->
+    <!-- HEADER -->
     <header class="bg-blue-900 text-white sticky top-0 z-40 shadow-md w-full overflow-hidden">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between w-full">
             <!-- Logo -->
@@ -27,7 +29,7 @@
                 </div>
             </div>
 
-            <!-- Ví, Admin Panel, Đăng tin & User Auth -->
+            <!-- Ví, Nút Quản Trị, Đăng Tin & Auth -->
             <div class="flex items-center space-x-1 sm:space-x-2 shrink-0">
                 <!-- Ví tiền -->
                 <div class="bg-blue-950/80 border border-blue-700/50 rounded-full px-1.5 py-1 sm:px-3 sm:py-1.5 flex items-center space-x-1">
@@ -36,13 +38,13 @@
                     <button onclick="openModal('modal-topup')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 text-[10px] font-extrabold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center leading-none transition">+</button>
                 </div>
 
-                <!-- Nút Admin Panel (Chỉ hiện khi tài khoản là Admin) -->
+                <!-- Nút Quản Trị (Dành cho Admin & SUP) -->
                 <button id="btn-admin-panel" onclick="openAdminPanel()" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold text-[11px] px-2 py-1 rounded-lg transition flex items-center space-x-1">
-                    <i class="fa-solid fa-user-shield"></i>
-                    <span class="hidden sm:inline">Admin</span>
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span class="hidden sm:inline" id="admin-btn-label">Quản Trị</span>
                 </button>
 
-                <!-- Nút Đăng tin (Bắt buộc kiểm tra đăng nhập) -->
+                <!-- Nút Đăng tin -->
                 <button onclick="checkAuthAndOpenPostModal()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg shadow-sm transition flex items-center justify-center">
                     <i class="fa-solid fa-plus text-xs"></i>
                     <span class="hidden sm:inline ml-1">Đăng tin</span>
@@ -50,18 +52,17 @@
 
                 <!-- Khu vực Tài khoản -->
                 <div id="auth-section" class="flex items-center border-l border-blue-800/80 pl-1 sm:pl-2">
-                    <!-- Chưa đăng nhập -->
                     <div id="auth-guest" class="flex items-center space-x-1 text-[11px] sm:text-sm">
                         <button onclick="openModal('modal-login')" class="font-medium hover:text-orange-400 whitespace-nowrap">Đăng nhập</button>
                         <span class="text-blue-500/60">|</span>
                         <button onclick="openModal('modal-register')" class="bg-blue-800 hover:bg-blue-700 font-medium px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md whitespace-nowrap">Đăng ký</button>
                     </div>
 
-                    <!-- Đã đăng nhập -->
                     <div id="auth-user" class="hidden items-center space-x-1">
                         <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-orange-500 flex items-center justify-center font-bold text-[11px] sm:text-xs border border-orange-400 text-white" id="user-avatar">U</div>
                         <div class="hidden md:block text-left">
                             <span id="user-display-name" class="text-xs font-semibold block leading-tight truncate max-w-[80px]">User</span>
+                            <span id="user-display-role" class="text-[9px] text-amber-300 block leading-tight">Khách</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <button onclick="openModal('modal-change-password')" class="text-[11px] text-blue-200 hover:text-white p-0.5" title="Đổi mật khẩu"><i class="fa-solid fa-key"></i></button>
@@ -73,15 +74,15 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT (Bố cục 2 Cột Cân Đối) -->
+    <!-- MAIN CONTENT -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
-        <!-- Banner Admin -->
-        <div id="admin-banner" class="hidden bg-purple-900 text-purple-100 p-3 rounded-xl mb-4 shadow-md border border-purple-700 items-center justify-between">
+        <!-- Banner Vai Trò Nâng Cao -->
+        <div id="role-banner" class="hidden bg-purple-900 text-purple-100 p-3 rounded-xl mb-4 shadow-md border border-purple-700 items-center justify-between">
             <div class="flex items-center space-x-2">
                 <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
-                <span class="text-xs font-bold">Chế độ Quyền Hạn Admin: Xem toàn bộ SĐT miễn phí & Quản lý User Sheet</span>
+                <span class="text-xs font-bold" id="role-banner-text">Đang kích hoạt quyền xem miễn phí & Quản trị</span>
             </div>
-            <button onclick="openAdminPanel()" class="bg-amber-400 text-slate-900 font-bold text-[11px] px-2.5 py-1 rounded-lg">Mở Bảng Admin</button>
+            <button onclick="openAdminPanel()" class="bg-amber-400 text-slate-900 font-bold text-[11px] px-2.5 py-1 rounded-lg">Bảng Quản Lý</button>
         </div>
 
         <!-- Toolbar lọc -->
@@ -100,18 +101,18 @@
 
             <div class="text-xs text-slate-500 flex items-center bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200/60 self-start md:self-auto">
                 <i class="fa-solid fa-circle-info text-blue-600 mr-1.5 text-sm"></i>
-                Phí mở khóa liên hệ: <span class="font-bold text-orange-600 ml-1">20.000đ / lượt</span>
+                Phí xem thông tin liên hệ: <span class="font-bold text-orange-600 ml-1">20.000đ / lượt</span>
             </div>
         </div>
 
         <!-- Bố cục 2 Cột -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Cột Trái (Thẻ tin đăng) -->
+            <!-- Cột Trái -->
             <div class="lg:col-span-2">
                 <div id="listings-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
             </div>
 
-            <!-- Cột Phải (Widget) -->
+            <!-- Cột Phải -->
             <div class="space-y-5">
                 <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
                     <h3 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
@@ -132,24 +133,24 @@
                 <div class="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl p-5 text-white shadow-sm border border-blue-800">
                     <div class="flex items-center space-x-2 mb-2">
                         <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
-                        <h4 class="font-bold text-sm">Bảo Mật Thông Tin 100%</h4>
+                        <h4 class="font-bold text-sm">Phân Quyền & Bảo Mật</h4>
                     </div>
                     <p class="text-xs text-blue-200 leading-relaxed">
-                        Tên nhà xe/chủ hàng được mã hóa dạng `***` và 5 số cuối SĐT ẩn dạng `*****`. Đăng nhập và dùng ví tài khoản để kích hoạt mở khóa liên hệ.
+                        Chỉ tài khoản đã đăng nhập mới có thể đăng bài hoặc nạp tiền để xem thông tin đàm phán cước vận tải.
                     </p>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- ==================== HỆ THỐNG MODALS ==================== -->
+    <!-- MODALS -->
 
     <!-- 1. MODAL ĐĂNG NHẬP -->
     <div id="modal-login" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
             <button onclick="closeModal('modal-login')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
             <h2 class="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2"><i class="fa-solid fa-right-to-bracket text-blue-900"></i> Đăng Nhập</h2>
-            <p class="text-xs text-slate-500 mb-4">Đăng nhập tài khoản Google Sheet để đăng tin</p>
+            <p class="text-xs text-slate-500 mb-4">Đăng nhập tài khoản để thực hiện giao dịch</p>
 
             <form onsubmit="handleLoginSubmit(event)" class="space-y-3">
                 <input type="tel" id="login-phone" required placeholder="Số điện thoại" class="w-full border rounded-lg p-2.5 text-sm">
@@ -169,18 +170,18 @@
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
             <button onclick="closeModal('modal-register')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
             <h2 class="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2"><i class="fa-solid fa-user-plus text-orange-500"></i> Đăng Ký Tài Khoản</h2>
-            <p class="text-xs text-slate-500 mb-3">Thông tin được lưu an toàn trên Google Sheet</p>
+            <p class="text-xs text-slate-500 mb-3">Tạo tài khoản miễn phí để kết nối chủ hàng & nhà xe</p>
 
             <form onsubmit="handleRegisterSubmit(event)" class="space-y-2.5">
                 <input type="text" id="reg-fullname" required placeholder="Họ và tên" class="w-full border rounded-lg p-2.5 text-sm">
                 <input type="tel" id="reg-phone" required placeholder="Số điện thoại" class="w-full border rounded-lg p-2.5 text-sm">
-                <select id="reg-role" class="w-full border rounded-lg p-2.5 text-sm font-medium">
-                    <option value="Chủ hàng">📦 Chủ hàng (Cần tìm xe)</option>
-                    <option value="Chủ xe / Nhà xe">🚛 Chủ xe / Đội xe (Cần tìm hàng)</option>
-                    <option value="Admin">🛡️ Admin Quản Trị Hệ Thống</option>
+                <select id="reg-role" class="w-full border rounded-lg p-2.5 text-sm font-medium bg-slate-50">
+                    <option value="Khách hàng">👤 User Khách hàng (Chủ hàng / Chủ xe)</option>
+                    <option value="SUP">🎧 User SUP (Nhân viên Support)</option>
+                    <option value="Admin">🛡️ User Admin (Quản trị hệ thống)</option>
                 </select>
                 <input type="password" id="reg-password" required placeholder="Mật khẩu" class="w-full border rounded-lg p-2.5 text-sm">
-                <div id="reg-loading" class="hidden text-center text-xs text-orange-600 font-semibold"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang đăng ký...</div>
+                <div id="reg-loading" class="hidden text-center text-xs text-orange-600 font-semibold"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang khởi tạo...</div>
                 <button type="submit" id="btn-reg-submit" class="w-full bg-orange-500 text-white font-semibold py-3 rounded-xl text-sm shadow-md">Tạo Tài Khoản</button>
                 <div class="text-center text-xs text-slate-500 pt-1">Đã có tài khoản? <a href="#" onclick="switchModal('modal-register', 'modal-login')" class="text-blue-900 font-bold hover:underline">Đăng nhập</a></div>
             </form>
@@ -218,25 +219,26 @@
         </div>
     </div>
 
-    <!-- 5. MODAL BẢNG QUẢN TRỊ ADMIN -->
+    <!-- 5. MODAL BẢNG QUẢN TRỊ USER (DÀNH CHO ADMIN & SUP) -->
     <div id="modal-admin-dashboard" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl relative mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-4xl w-full p-6 shadow-2xl relative mx-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal('modal-admin-dashboard')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-2xl font-bold text-purple-950 mb-1 flex items-center gap-2"><i class="fa-solid fa-user-shield text-purple-600"></i> Bảng Quản Trị Admin</h2>
-            <p class="text-xs text-slate-500 mb-4">Danh sách tài khoản trực tiếp từ Google Sheet</p>
+            <h2 class="text-2xl font-bold text-purple-950 mb-1 flex items-center gap-2"><i class="fa-solid fa-user-gear text-purple-600"></i> Bảng Quản Trị Hệ Thống</h2>
+            <p class="text-xs text-slate-500 mb-4" id="admin-panel-subtitle">Quản lý danh sách người dùng và gán vai trò quyền hạn</p>
 
             <div class="border rounded-xl overflow-x-auto mb-4">
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
                         <tr class="bg-slate-100 border-b text-slate-600">
                             <th class="p-2.5">Họ và Tên</th>
-                            <th class="p-2.5">SĐT</th>
-                            <th class="p-2.5">Vai Trò</th>
-                            <th class="p-2.5">Ngày Đăng Ký</th>
+                            <th class="p-2.5">Số Điện Thoại</th>
+                            <th class="p-2.5">Vai Trò Hiện Tại</th>
+                            <th class="p-2.5 text-center">Gán / Đổi Vai Trò</th>
+                            <th class="p-2.5">Ngày Tạo</th>
                         </tr>
                     </thead>
                     <tbody id="admin-user-table-body">
-                        <tr><td colspan="4" class="p-4 text-center text-slate-400">Đang tải dữ liệu từ Google Sheet...</td></tr>
+                        <tr><td colspan="5" class="p-3 text-center text-slate-400">Đang tải dữ liệu...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -247,9 +249,10 @@
     <div id="modal-post" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative mx-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal('modal-post')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-blue-900"></i> Đăng tin giao dịch mới</h2>
+            <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-blue-900"></i> <span id="modal-post-title">Đăng tin giao dịch mới</span></h2>
             
             <form id="form-post" onsubmit="handleNewPost(event)" class="space-y-3">
+                <input type="hidden" id="edit-post-id" value="">
                 <div class="grid grid-cols-2 gap-2">
                     <label class="border p-2 rounded-xl flex items-center space-x-2"><input type="radio" name="post_type" value="hang-tim-xe" checked><span class="text-xs font-bold">📦 Hàng Tìm Xe</span></label>
                     <label class="border p-2 rounded-xl flex items-center space-x-2"><input type="radio" name="post_type" value="xe-tim-hang"><span class="text-xs font-bold">🚛 Xe Tìm Hàng</span></label>
@@ -271,7 +274,7 @@
                     <input type="text" id="post-phone" required placeholder="SĐT liên hệ" class="border p-2 rounded-lg text-sm">
                 </div>
                 <textarea id="post-desc" rows="2" placeholder="Ghi chú thêm..." class="w-full border p-2 rounded-lg text-sm"></textarea>
-                <button type="submit" class="w-full bg-orange-500 text-white font-semibold py-3 rounded-xl text-sm shadow-md">Đăng tin ngay</button>
+                <button type="submit" class="w-full bg-orange-500 text-white font-semibold py-3 rounded-xl text-sm shadow-md">Xác Nhận Đăng Bài</button>
             </form>
         </div>
     </div>
@@ -281,14 +284,13 @@
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4 text-center">
             <button onclick="closeModal('modal-topup')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
             <h3 class="text-lg font-bold text-slate-900 mb-2">Nạp Tiền Vào Ví</h3>
-            <p class="text-xs text-slate-500 mb-4">Số dư ví dùng để mở khóa các SĐT và thông tin liên hệ ẩn.</p>
+            <p class="text-xs text-slate-500 mb-4">Số dư ví dùng để mở khóa các SĐT và thông tin liên hệ chào giá cước.</p>
             <button onclick="executeTopup(100000)" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-sm shadow-md">+ Nạp 100.000đ Ngay</button>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC THUẦN -->
+    <!-- JAVASCRIPT LOGIC PHÍA CLIENT -->
     <script>
-        // DÁN URL GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY:
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzdD_1rLN1XHx0nHgaUJeFnRopWKw7GkhQxMoRn9X2V14T_pbMy3tZz93qrkIZ8yzM/exec";
 
         let currentUser = null;
@@ -309,6 +311,7 @@
                 scheduleDate: '14/08/2026 07:00',
                 owner: 'Hồ Minh Tuấn',
                 phone: '0905123456',
+                userPhone: '0905123456', // Dùng xác định chủ bài viết
                 note: 'Hàng đóng bao 50kg. Cần xe thùng bạt 3 chân bốc hàng đúng giờ.'
             },
             {
@@ -323,6 +326,7 @@
                 scheduleDate: '13/08/2026 18:00',
                 owner: 'Trương Như Ý',
                 phone: '0935888999',
+                userPhone: '0935888999',
                 note: 'Xe trống xuất phát từ Bình Dương về Đà Nẵng tối nay. Nhận ghép hàng.'
             }
         ];
@@ -333,7 +337,17 @@
             updateWalletUI();
         });
 
-        // HÀM MÃ HÓA TÊN VÀ SĐT (ẨN *** VÀ 5 SỐ CUỐI *****)
+        async function callGoogleSheetAPI(data) {
+            const response = await fetch(https://script.google.com/macros/s/AKfycbxzdD_1rLN1XHx0nHgaUJeFnRopWKw7GkhQxMoRn9X2V14T_pbMy3tZz93qrkIZ8yzM/exec, {
+                method: 'POST',
+                mode: 'cors',
+                redirect: 'follow',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(data)
+            });
+            return await response.json();
+        }
+
         function maskName(name) {
             if (!name) return '***';
             let parts = name.trim().split(' ');
@@ -349,7 +363,6 @@
             return phone.substring(0, phone.length - 5) + '*****';
         }
 
-        // TÍNH NĂNG ĐĂNG NHẬP / ĐĂNG KÝ / QUÊN MK / ĐỔI MK QUA GOOGLE SHEETS
         async function handleRegisterSubmit(e) {
             e.preventDefault();
             const fullname = document.getElementById('reg-fullname').value;
@@ -361,17 +374,13 @@
             document.getElementById('btn-reg-submit').disabled = true;
 
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'register', fullname, phone, role, password })
-                });
-                const result = await response.json();
+                const result = await callGoogleSheetAPI({ action: 'register', fullname, phone, role, password });
                 if (result.status === 'success') {
-                    alert('Đăng ký thành công!');
+                    alert('Đăng ký tài khoản thành công!');
                     setCurrentUser(result.user);
                     closeModal('modal-register');
                 } else { alert(result.message || 'Lỗi đăng ký!'); }
-            } catch (err) { alert('Lỗi kết nối đến Google Sheet!'); }
+            } catch (err) { alert('Lỗi kết nối máy chủ!'); }
             finally {
                 document.getElementById('reg-loading').classList.add('hidden');
                 document.getElementById('btn-reg-submit').disabled = false;
@@ -387,17 +396,13 @@
             document.getElementById('btn-login-submit').disabled = true;
 
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'login', phone, password })
-                });
-                const result = await response.json();
+                const result = await callGoogleSheetAPI({ action: 'login', phone, password });
                 if (result.status === 'success') {
                     alert('Đăng nhập thành công!');
                     setCurrentUser(result.user);
                     closeModal('modal-login');
-                } else { alert(result.message || 'Lỗi đăng nhập!'); }
-            } catch (err) { alert('Lỗi kết nối đến Google Sheet!'); }
+                } else { alert(result.message || 'Sai số điện thoại hoặc mật khẩu!'); }
+            } catch (err) { alert('Lỗi kết nối máy chủ!'); }
             finally {
                 document.getElementById('login-loading').classList.add('hidden');
                 document.getElementById('btn-login-submit').disabled = false;
@@ -413,14 +418,10 @@
             document.getElementById('btn-forgot-submit').disabled = true;
 
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'forgot_password', phone, new_password })
-                });
-                const result = await response.json();
+                const result = await callGoogleSheetAPI({ action: 'forgot_password', phone, new_password });
                 alert(result.message);
                 if (result.status === 'success') switchModal('modal-forgot', 'modal-login');
-            } catch (err) { alert('Lỗi kết nối Google Sheet!'); }
+            } catch (err) { alert('Lỗi kết nối máy chủ!'); }
             finally {
                 document.getElementById('forgot-loading').classList.add('hidden');
                 document.getElementById('btn-forgot-submit').disabled = false;
@@ -437,63 +438,93 @@
             document.getElementById('btn-change-submit').disabled = true;
 
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'change_password', phone: currentUser.phone, old_password, new_password })
-                });
-                const result = await response.json();
+                const result = await callGoogleSheetAPI({ action: 'change_password', phone: currentUser.phone, old_password, new_password });
                 alert(result.message);
                 if (result.status === 'success') closeModal('modal-change-password');
-            } catch (err) { alert('Lỗi kết nối Google Sheet!'); }
+            } catch (err) { alert('Lỗi kết nối máy chủ!'); }
             finally {
                 document.getElementById('change-loading').classList.add('hidden');
                 document.getElementById('btn-change-submit').disabled = false;
             }
         }
 
-        // TÍNH NĂNG ADMIN LẤY SHEET DATA
+        // TÍNH NĂNG QUẢN TRỊ ADMIN VÀ SUP
         async function openAdminPanel() {
+            if (!currentUser || (currentUser.role !== 'Admin' && currentUser.role !== 'SUP')) return;
             openModal('modal-admin-dashboard');
+
+            const isAdmin = currentUser.role === 'Admin';
+            document.getElementById('admin-panel-subtitle').innerText = isAdmin ? 
+                'Quản lý danh sách người dùng và gán vai trò quyền hạn' : 
+                'Danh sách khách hàng (Quyền hạn SUP - Chỉ xem)';
+
             const tbody = document.getElementById('admin-user-table-body');
-            tbody.innerHTML = '<tr><td colspan="4" class="p-3 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang tải từ Sheet...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang tải dữ liệu...</td></tr>';
 
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'get_users' })
-                });
-                const result = await response.json();
+                const result = await callGoogleSheetAPI({ action: 'get_users' });
                 if (result.status === 'success' && result.users) {
                     tbody.innerHTML = '';
                     result.users.forEach(u => {
+                        const isUserAdmin = u.role === 'Admin';
+                        const isUserSup = u.role === 'SUP';
+
                         tbody.innerHTML += `
                             <tr class="border-b hover:bg-slate-50">
                                 <td class="p-2.5 font-semibold">${u.fullname}</td>
                                 <td class="p-2.5 font-mono">${u.phone}</td>
-                                <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${u.role === 'Admin' ? 'bg-purple-100 text-purple-800' : 'bg-slate-100 text-slate-700'}">${u.role}</span></td>
+                                <td class="p-2.5">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isUserAdmin ? 'bg-purple-100 text-purple-800' : (isUserSup ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700')}">
+                                        ${u.role}
+                                    </span>
+                                </td>
+                                <td class="p-2.5 text-center">
+                                    ${isAdmin ? `
+                                        <select onchange="updateUserRole('${u.phone}', this.value)" class="text-[11px] border rounded p-1 font-semibold">
+                                            <option value="Khách hàng" ${u.role === 'Khách hàng' ? 'selected' : ''}>Khách hàng</option>
+                                            <option value="SUP" ${u.role === 'SUP' ? 'selected' : ''}>SUP (Support)</option>
+                                            <option value="Admin" ${u.role === 'Admin' ? 'selected' : ''}>Admin</option>
+                                        </select>
+                                    ` : '<span class="text-slate-400 text-[11px]">Không có quyền đổi</span>'}
+                                </td>
                                 <td class="p-2.5 text-slate-400">${new Date(u.createdAt).toLocaleDateString('vi-VN')}</td>
                             </tr>
                         `;
                     });
                 }
-            } catch (err) { tbody.innerHTML = '<tr><td colspan="4" class="p-3 text-center text-red-500">Không thể kết nối Sheet!</td></tr>'; }
+            } catch (err) { tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-red-500">Lỗi kết nối máy chủ!</td></tr>'; }
         }
 
-        // ĐIỀU KIỆN ĐĂNG TIN
+        async function updateUserRole(targetPhone, newRole) {
+            if (!currentUser || currentUser.role !== 'Admin') return;
+            if (!confirm(`Bạn có chắc chắn muốn chuyển vai trò của SĐT ${targetPhone} thành ${newRole}?`)) return;
+
+            try {
+                const result = await callGoogleSheetAPI({ action: 'update_role', target_phone: targetPhone, new_role: newRole });
+                alert(result.message);
+                openAdminPanel(); // Refresh lại danh sách
+            } catch (err) { alert('Lỗi khi cập nhật vai trò!'); }
+        }
+
         function checkAuthAndOpenPostModal() {
             if (!currentUser) {
                 alert('Vui lòng ĐĂNG NHẬP tài khoản trước khi thực hiện đăng tin!');
                 openModal('modal-login');
                 return;
             }
+            document.getElementById('edit-post-id').value = "";
+            document.getElementById('modal-post-title').innerText = "Đăng tin giao dịch mới";
+            document.getElementById('form-post').reset();
             openModal('modal-post');
         }
 
-        // RENDER DANH SÁCH BÀI ĐĂNG
+        // PHÂN QUYỀN HIỂN THỊ THẺ BÀI ĐĂNG (ADMIN / SUP / KHÁCH HÀNG)
         function renderListings() {
             const container = document.getElementById('listings-container');
             container.innerHTML = '';
+
             const isAdmin = currentUser && currentUser.role === 'Admin';
+            const isSup = currentUser && currentUser.role === 'SUP';
 
             const filtered = listings.filter(item => (activeTab === 'all' || item.type === activeTab));
 
@@ -502,22 +533,30 @@
             document.getElementById('count-xe').innerText = listings.filter(i => i.type === 'xe-tim-hang').length;
 
             filtered.forEach(item => {
-                const isUnlocked = isAdmin || unlockedPosts.has(item.id);
+                const isOwner = currentUser && (currentUser.phone === item.userPhone);
+                // Admin, SUP hoặc Chủ bài viết hoặc người đã bỏ 20k mua tin sẽ thấy FULL SĐT
+                const isUnlocked = isAdmin || isSup || isOwner || unlockedPosts.has(item.id);
                 const isHang = item.type === 'hang-tim-xe';
 
                 const displayName = isUnlocked ? item.owner : maskName(item.owner);
                 const displayPhone = isUnlocked ? item.phone : maskPhone(item.phone);
 
                 const cardHTML = `
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between relative">
                         <div>
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full ${isHang ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}">
                                     ${isHang ? '📦 HÀNG TÌM XE' : '🚛 XE TÌM HÀNG'}
                                 </span>
-                                <span class="text-[11px] text-slate-400" title="Ngày giờ đăng bài">
-                                    <i class="fa-regular fa-clock mr-1"></i>Đăng: ${item.createdAt}
-                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-[11px] text-slate-400" title="Ngày giờ đăng bài">
+                                        <i class="fa-regular fa-clock mr-1"></i>${item.createdAt}
+                                    </span>
+                                    ${(isAdmin || isSup || isOwner) ? `
+                                        <button onclick="editPost(${item.id})" class="text-blue-600 hover:text-blue-800 text-xs p-1" title="Chỉnh sửa nội dung"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deletePost(${item.id})" class="text-red-500 hover:text-red-700 text-xs p-1" title="Xóa bài đăng"><i class="fa-solid fa-trash"></i></button>
+                                    ` : ''}
+                                </div>
                             </div>
 
                             <h3 class="font-bold text-slate-900 text-sm sm:text-base mb-2 line-clamp-1">${item.title}</h3>
@@ -568,6 +607,31 @@
             });
         }
 
+        // SỬA VÀ XÓA BÀI ĐĂNG
+        function deletePost(postId) {
+            if (confirm('Bạn có chắc chắn muốn xóa bài đăng này?')) {
+                listings = listings.filter(i => i.id !== postId);
+                renderListings();
+            }
+        }
+
+        function editPost(postId) {
+            const item = listings.find(i => i.id === postId);
+            if (!item) return;
+
+            document.getElementById('edit-post-id').value = item.id;
+            document.getElementById('modal-post-title').innerText = "Chỉnh sửa bài đăng";
+            document.getElementById('post-from').value = item.from;
+            document.getElementById('post-to').value = item.to;
+            document.getElementById('post-title').value = item.title;
+            document.getElementById('post-weight').value = item.weight;
+            document.getElementById('post-price').value = item.price;
+            document.getElementById('post-phone').value = item.phone;
+            document.getElementById('post-desc').value = item.note;
+
+            openModal('modal-post');
+        }
+
         function setCurrentUser(user) {
             currentUser = user;
             localStorage.setItem('vanta247_user', JSON.stringify(user));
@@ -593,26 +657,33 @@
 
         function updateAuthUI() {
             const isAdmin = currentUser && currentUser.role === 'Admin';
+            const isSup = currentUser && currentUser.role === 'SUP';
+
             if (currentUser) {
                 document.getElementById('auth-guest').classList.add('hidden');
                 document.getElementById('auth-user').classList.remove('hidden');
                 document.getElementById('auth-user').classList.add('flex');
                 document.getElementById('user-display-name').innerText = currentUser.fullname;
+                document.getElementById('user-display-role').innerText = currentUser.role || 'Khách';
                 document.getElementById('user-avatar').innerText = currentUser.fullname.charAt(0).toUpperCase();
 
-                if (isAdmin) {
+                if (isAdmin || isSup) {
                     document.getElementById('btn-admin-panel').classList.remove('hidden');
-                    document.getElementById('admin-banner').classList.remove('hidden');
-                    document.getElementById('admin-banner').classList.add('flex');
+                    document.getElementById('admin-btn-label').innerText = isAdmin ? "Admin Panel" : "SUP Panel";
+                    document.getElementById('role-banner').classList.remove('hidden');
+                    document.getElementById('role-banner').classList.add('flex');
+                    document.getElementById('role-banner-text').innerText = isAdmin ? 
+                        "Quyền Admin: Xem full SĐT, Sửa/Xóa bài, Gán vai trò User" : 
+                        "Quyền SUP: Xem full SĐT, Sửa/Xóa nội dung bài viết";
                 } else {
                     document.getElementById('btn-admin-panel').classList.add('hidden');
-                    document.getElementById('admin-banner').classList.add('hidden');
+                    document.getElementById('role-banner').classList.add('hidden');
                 }
             } else {
                 document.getElementById('auth-guest').classList.remove('hidden');
                 document.getElementById('auth-user').classList.add('hidden');
                 document.getElementById('btn-admin-panel').classList.add('hidden');
-                document.getElementById('admin-banner').classList.add('hidden');
+                document.getElementById('role-banner').classList.add('hidden');
             }
         }
 
@@ -627,16 +698,16 @@
 
         function requestUnlockPhone(postId) {
             if (!currentUser) {
-                alert('Vui lòng ĐĂNG NHẬP để thực hiện mở khóa SĐT!');
+                alert('Vui lòng ĐĂNG NHẬP để mở khóa thông tin liên hệ!');
                 openModal('modal-login');
                 return;
             }
             if (walletBalance < 20000) {
-                alert('Số dư không đủ! Vui lòng nạp thêm.');
+                alert('Số dư tài khoản không đủ! Vui lòng nạp thêm.');
                 openModal('modal-topup');
                 return;
             }
-            if (confirm('Dùng 20.000đ để mở khóa SĐT & Tên liên hệ?')) {
+            if (confirm('Sử dụng 20.000đ để mở khóa SĐT & Tên liên hệ?')) {
                 walletBalance -= 20000;
                 unlockedPosts.add(postId);
                 updateWalletUI();
@@ -657,36 +728,57 @@
 
         function handleNewPost(e) {
             e.preventDefault();
+            const editId = document.getElementById('edit-post-id').value;
             const phone = document.getElementById('post-phone').value;
             const rawSchedule = document.getElementById('post-schedule-date').value;
 
             const scheduleObj = new Date(rawSchedule);
             const formattedSchedule = scheduleObj.toLocaleDateString('vi-VN') + ' ' + scheduleObj.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
 
-            const now = new Date();
-            const createdAt = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
+            if (editId) {
+                // Đang cập nhật bài cũ
+                const item = listings.find(i => i.id === parseInt(editId));
+                if (item) {
+                    item.type = document.querySelector('input[name="post_type"]:checked').value;
+                    item.from = document.getElementById('post-from').value;
+                    item.to = document.getElementById('post-to').value;
+                    item.title = document.getElementById('post-title').value;
+                    item.weight = document.getElementById('post-weight').value;
+                    item.price = document.getElementById('post-price').value;
+                    item.phone = phone;
+                    item.scheduleDate = formattedSchedule;
+                    item.note = document.getElementById('post-desc').value;
+                }
+                alert('Cập nhật bài đăng thành công!');
+            } else {
+                // Đăng bài mới
+                const now = new Date();
+                const createdAt = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
 
-            const newPost = {
-                id: Date.now(),
-                type: document.querySelector('input[name="post_type"]:checked').value,
-                title: document.getElementById('post-title').value,
-                from: document.getElementById('post-from').value,
-                to: document.getElementById('post-to').value,
-                weight: document.getElementById('post-weight').value,
-                price: document.getElementById('post-price').value,
-                createdAt: createdAt,
-                scheduleDate: formattedSchedule,
-                owner: currentUser.fullname,
-                phone: phone,
-                note: document.getElementById('post-desc').value
-            };
+                const newPost = {
+                    id: Date.now(),
+                    type: document.querySelector('input[name="post_type"]:checked').value,
+                    title: document.getElementById('post-title').value,
+                    from: document.getElementById('post-from').value,
+                    to: document.getElementById('post-to').value,
+                    weight: document.getElementById('post-weight').value,
+                    price: document.getElementById('post-price').value,
+                    createdAt: createdAt,
+                    scheduleDate: formattedSchedule,
+                    owner: currentUser.fullname,
+                    phone: phone,
+                    userPhone: currentUser.phone,
+                    note: document.getElementById('post-desc').value
+                };
 
-            listings.unshift(newPost);
-            unlockedPosts.add(newPost.id);
+                listings.unshift(newPost);
+                unlockedPosts.add(newPost.id);
+                alert('Đăng tin mới thành công!');
+            }
+
             renderListings();
             closeModal('modal-post');
             document.getElementById('form-post').reset();
-            alert('Đăng tin thành công!');
         }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
