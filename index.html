@@ -343,23 +343,81 @@
         fetchBalanceFromSheet();
     });
 
-    // 1. ĐỌC SỐ DƯ TỪ GOOGLE SHEET (READ)
-    async function fetchBalanceFromSheet() {
-        document.getElementById('wallet-balance').innerText = "Đang tải...";
-        try {
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?userId=${CURRENT_USER_ID}`);
-            const result = await response.json();
-            if (result.status === "success") {
-                walletBalance = Number(result.balance);
-                updateWalletUI();
-            } else {
-                console.error("Lỗi:", result.message);
+ // 1. ĐỌC SỐ DƯ & DANH SÁCH TIN ĐÃ MỞ TỪ GOOGLE SHEET KHI TẢI TRANG
+async function fetchUserDataFromSheet() {
+    document.getElementById('wallet-balance').innerText = "Đang tải...";
+    try {
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?userId=${CURRENT_USER_ID}`);
+        const result = await response.json();
+        if (result.status === "success") {
+            walletBalance = Number(result.balance);
+            
+            // Cập nhật danh sách ID tin đã mở từ Google Sheet vào Set Javascript
+            if (result.unlockedPosts && Array.isArray(result.unlockedPosts)) {
+                unlockedPosts = new Set(result.unlockedPosts.map(id => Number(id)));
             }
-        } catch (error) {
-            console.error("Lỗi lấy số dư từ Sheet:", error);
-            document.getElementById('wallet-balance').innerText = "Lỗi kết nối";
+
+            updateWalletUI();
+            renderListings(); // Vẽ lại giao diện (các tin đã mở sẽ tự hiển thị SĐT)
         }
+    } catch (error) {
+        console.error("Lỗi đồng bộ dữ liệu từ Sheet:", error);
     }
+}
+
+// 2. MỞ KHÓA TIN MỚI & LƯU LẠI VÀO SHEET
+async function confirmUnlockPhone() {
+    if (!selectedPostIdToUnlock) return;
+
+    const btn = document.getElementById('btn-confirm-unlock');
+    btn.innerText = "Đang lưu vào Sheet...";
+    btn.disabled = true;
+
+    try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({
+                action: "UNLOCK",
+                userId: CURRENT_USER_ID,
+                amount: 20000,
+                postId: selectedPostIdToUnlock, // Gửi ID bài đăng
+                description: `Mở khóa SĐT bài đăng ID: ${selectedPostIdToUnlock}`
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+            walletBalance = Number(result.newBalance);
+            
+            // Cập nhật lại danh sách tin đã mở từ phản hồi của Sheet
+            if (result.unlockedPosts && Array.isArray(result.unlockedPosts)) {
+                unlockedPosts = new Set(result.unlockedPosts.map(id => Number(id)));
+            } else {
+                unlockedPosts.add(selectedPostIdToUnlock);
+            }
+
+            updateWalletUI();
+            renderListings(); // Render lại giao diện
+            closeModal('modal-unlock');
+            selectedPostIdToUnlock = null;
+            alert("Mở khóa thành công! Thông tin bài đăng này đã được lưu vĩnh viễn cho tài khoản của bạn.");
+        } else {
+            alert(result.message || "Giao dịch thất bại!");
+        }
+    } catch (err) {
+        alert("Lỗi kết nối máy chủ Google Sheets!");
+    } finally {
+        btn.innerText = "Mở ngay (20k)";
+        btn.disabled = false;
+    }
+}
+
+// Gọi hàm đồng bộ khi vừa vào trang
+document.addEventListener('DOMContentLoaded', () => {
+    fetchUserDataFromSheet();
+});
 
     // 2. MỞ KHÓA SỐ ĐIỆN THOẠI & TRỪ TIỀN SHEET (-20.000đ)
     function requestUnlockPhone(postId) {
