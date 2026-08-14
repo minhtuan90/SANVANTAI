@@ -18,7 +18,6 @@
     <!-- NAVIGATION HEADER -->
     <header class="bg-blue-900 text-white sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <!-- Logo -->
             <div class="flex items-center space-x-3 cursor-pointer" onclick="filterListings('all')">
                 <div class="bg-orange-500 p-2 rounded-lg text-white">
                     <i class="fa-solid fa-truck-fast text-xl"></i>
@@ -29,9 +28,7 @@
                 </div>
             </div>
 
-            <!-- User Wallet & Actions -->
             <div class="flex items-center space-x-3 sm:space-x-5">
-                <!-- Ví tài khoản -->
                 <div class="bg-blue-950/60 border border-blue-700/50 rounded-full px-3 py-1.5 flex items-center space-x-2">
                     <i class="fa-solid fa-wallet text-amber-400"></i>
                     <div class="text-xs">
@@ -43,42 +40,35 @@
                     </button>
                 </div>
 
-                <!-- Đăng tin Button -->
                 <button onclick="openModal('modal-post')" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow-sm transition flex items-center space-x-1.5">
                     <i class="fa-solid fa-plus"></i>
                     <span class="hidden sm:inline">Đăng tin</span>
                 </button>
 
-                <!-- Profile -->
                 <div class="flex items-center space-x-2 border-l border-blue-800 pl-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center font-bold text-xs border border-blue-500">
-                        AD
-                    </div>
+                    <div class="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center font-bold text-xs border border-blue-500">AD</div>
                     <span class="hidden md:inline text-sm font-medium">admin</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- BANNER ADMIN -->
+    <!-- ADMIN STATUS BANNER -->
     <div class="bg-purple-900 text-white py-2 px-4 shadow-inner">
         <div class="max-w-7xl mx-auto flex items-center justify-between text-xs sm:text-sm">
             <div class="flex items-center space-x-2">
                 <i class="fa-solid fa-shield-halved text-amber-400"></i>
-                <span><strong>Trạng thái hệ thống:</strong> Đồng bộ dữ liệu Số dư Realtime với hệ thống</span>
+                <span><strong>Đồng bộ Hệ Thống:</strong> Trừ tiền & Lưu trạng thái mở khóa theo User</span>
             </div>
-            <button onclick="fetchBalanceFromSheet()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1 rounded-md text-xs">
-                <i class="fa-solid fa-rotate mr-1"></i> Làm mới ví
+            <button onclick="fetchUserDataFromSheet()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1 rounded-md text-xs">
+                <i class="fa-solid fa-rotate mr-1"></i> Tải lại số dư
             </button>
         </div>
     </div>
 
-    <!-- MAIN CONTENT AREA -->
+    <!-- MAIN CONTENT -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        <!-- CỘT TRÁI: DANH SÁCH TIN ĐĂNG (2 Cột) -->
         <div class="lg:col-span-2 space-y-6">
-            <!-- Tabs Bar -->
             <div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-4 gap-2">
                 <div class="flex space-x-2">
                     <button id="tab-all" onclick="filterListings('all')" class="px-4 py-2 rounded-lg font-medium text-sm transition bg-blue-900 text-white">
@@ -96,15 +86,10 @@
                 </div>
             </div>
 
-            <!-- CARDS CONTAINER -->
-            <div id="listings-container" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <!-- Javascript sẽ Render Tin Đăng ở đây -->
-            </div>
+            <div id="listings-container" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
         </div>
 
-        <!-- CỘT PHẢI: BẢNG THỐNG KÊ & BẢO MẬT -->
         <div class="space-y-6">
-            <!-- Thống kê -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                 <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-chart-line text-blue-600"></i> Thống Kê Sàn Realtime
@@ -121,524 +106,289 @@
                 </div>
             </div>
 
-            <!-- Khối Bảo mật Thông tin -->
             <div class="bg-gradient-to-br from-blue-900 to-indigo-900 text-white p-6 rounded-2xl shadow-lg">
                 <h3 class="font-bold text-base mb-3 flex items-center gap-2 text-amber-400">
                     <i class="fa-solid fa-shield-halved"></i> Bảo Mật Thông Tin 100%
                 </h3>
                 <p class="text-xs text-blue-100 leading-relaxed">
                     Tên nhà xe/chủ hàng ẩn dạng <code class="bg-blue-950 px-1 rounded">***</code> và 5 số cuối SĐT ẩn dạng <code class="bg-blue-950 px-1 rounded">*****</code>. 
-                    Mở khóa liên hệ để đàm phán cước trực tiếp. Chi phí để xem thông tin số điện thoại và thông tin liên hệ là <strong>20.000đ / 1 lần</strong> (Đồng bộ trừ tiền trực tiếp trên hệ thống).
+                    Mở khóa liên hệ để đàm phán cước trực tiếp. Chi phí để xem thông tin số điện thoại là <strong>20.000đ / 1 lần</strong> (mở vĩnh viễn cho tài khoản).
                 </p>
             </div>
         </div>
-
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-slate-900 text-slate-400 text-sm py-6 border-t border-slate-800 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p>© 2026 VANTAI247 - Hệ thống Sàn Giao Dịch Vận Tải Trực Tuyến Kết Nối dữ liệu hệ thống API</p>
-        </div>
-    </footer>
-
-    <!-- ==================== MODALS ==================== -->
-
+    <!-- MODALS -->
     <!-- 1. MODAL NẠP TIỀN -->
     <div id="modal-topup" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative mx-4">
-            <button onclick="closeModal('modal-topup')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            
-            <h2 class="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2">
-                <i class="fa-solid fa-wallet text-amber-500"></i> Nạp tiền vào ví
-            </h2>
-            <p class="text-xs text-slate-500 mb-5">Số dư khả dụng hiện tại: <span class="font-bold text-blue-900" id="modal-current-balance">0đ</span></p>
+            <button onclick="closeModal('modal-topup')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2"><i class="fa-solid fa-wallet text-amber-500"></i> Nạp tiền vào ví</h2>
+            <p class="text-xs text-slate-500 mb-5">Số dư khả dụng: <span class="font-bold text-blue-900" id="modal-current-balance">0đ</span></p>
 
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-2">Chọn nhanh số tiền nạp</label>
                     <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setTopupAmount(50000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50 transition">50.000đ</button>
-                        <button onclick="setTopupAmount(100000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50 transition">100.000đ</button>
-                        <button onclick="setTopupAmount(200000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50 transition">200.000đ</button>
+                        <button onclick="setTopupAmount(50000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50">50.000đ</button>
+                        <button onclick="setTopupAmount(100000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50">100.000đ</button>
+                        <button onclick="setTopupAmount(200000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50">200.000đ</button>
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Hoặc nhập số tiền khác (VNĐ)</label>
-                    <input type="number" id="topup-custom-amount" value="50000" placeholder="VD: 50000" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="number" id="topup-custom-amount" value="50000" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 </div>
 
-                <div class="bg-slate-50 p-4 rounded-xl text-center border border-dashed border-slate-300">
-                    <p class="text-xs font-semibold text-slate-600 mb-2">Quét mã VietQR chuyển khoản tự động (24/7)</p>
-                    <div class="bg-white p-2 inline-block rounded-lg shadow-sm border">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=VANTAI247_PAYMENT" alt="QR Code" class="w-32 h-32 mx-auto">
-                    </div>
-                    <p class="text-[11px] text-slate-400 mt-2">Nội dung CK: <span class="font-mono font-bold text-slate-700">NAP U1001</span></p>
-                </div>
-
-                <button id="btn-confirm-topup" onclick="executeTopup()" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-xl transition text-sm">
-                    Xác nhận nạp ngay (Cộng tiền vào tài khoản)
-                </button>
+                <button id="btn-confirm-topup" onclick="executeTopup()" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-xl transition text-sm">Xác nhận nạp ngay (Cộng tiền vào Tài khoản)</button>
             </div>
         </div>
     </div>
 
-    <!-- 2. MODAL XÁC NHẬN MỞ KHÓA SỐ ĐIỆN THOẠI -->
+    <!-- 2. MODAL MỞ KHÓA -->
     <div id="modal-unlock" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4 text-center">
-            <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
-                <i class="fa-solid fa-lock-open"></i>
-            </div>
-            
+            <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-lock-open"></i></div>
             <h3 class="text-lg font-bold text-slate-900 mb-1">Mở khóa Số Điện Thoại</h3>
-            <p class="text-xs text-slate-500 mb-4">Phí mở khóa liên hệ cho tin đăng này là <strong class="text-orange-600">20.000đ</strong>. Tiền sẽ được trừ trực tiếp vào ví trên hệ thống.</p>
+            <p class="text-xs text-slate-500 mb-4">Phí mở khóa liên hệ cho tin đăng này là <strong class="text-orange-600">20.000đ</strong>. Lần sau vào lại sẽ không mất phí nữa.</p>
 
             <div class="bg-slate-50 p-3 rounded-lg mb-4 text-left text-xs space-y-1 border">
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Số dư hiện tại:</span>
-                    <span id="unlock-current-balance" class="font-semibold">0đ</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Phí mở khóa:</span>
-                    <span class="font-semibold text-red-600">-20.000đ</span>
-                </div>
-                <div class="border-t pt-1 flex justify-between font-bold">
-                    <span>Còn lại sau mở khóa:</span>
-                    <span id="unlock-remaining-balance" class="text-blue-900">0đ</span>
-                </div>
+                <div class="flex justify-between"><span class="text-slate-500">Số dư hiện tại:</span><span id="unlock-current-balance" class="font-semibold">0đ</span></div>
+                <div class="flex justify-between"><span class="text-slate-500">Phí mở khóa:</span><span class="font-semibold text-red-600">-20.000đ</span></div>
+                <div class="border-t pt-1 flex justify-between font-bold"><span>Còn lại:</span><span id="unlock-remaining-balance" class="text-blue-900">0đ</span></div>
             </div>
 
             <div class="flex space-x-2">
-                <button onclick="closeModal('modal-unlock')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 rounded-xl text-sm transition">
-                    Hủy bỏ
-                </button>
-                <button id="btn-confirm-unlock" onclick="confirmUnlockPhone()" class="w-1/2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">
-                    Mở ngay (20k)
-                </button>
+                <button onclick="closeModal('modal-unlock')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 rounded-xl text-sm">Hủy bỏ</button>
+                <button id="btn-confirm-unlock" onclick="confirmUnlockPhone()" class="w-1/2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-xl text-sm shadow-sm">Mở ngay (20k)</button>
             </div>
         </div>
     </div>
 
-    <!-- 3. MODAL ĐĂNG TIN MỚI -->
-    <div id="modal-post" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative mx-4 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeModal('modal-post')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            
-            <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-pen-to-square text-blue-900"></i> Đăng tin giao dịch mới
-            </h2>
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DÁN URL GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqb4nPRFzegyFUHTKwXKhYhBV4ERxma59tTPF7F9QBqc-jIF256hxbM8ZLFT5nj8wC/exec"; 
+        const CURRENT_USER_ID = "U1001";
 
-            <form id="form-post" onsubmit="handleNewPost(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Loại tin đăng</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <label class="border p-2.5 rounded-xl flex items-center space-x-2 cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="post_type" value="hang-tim-xe" checked class="text-blue-600">
-                            <span class="text-xs font-bold text-slate-700">📦 Hàng Tìm Xe</span>
-                        </label>
-                        <label class="border p-2.5 rounded-xl flex items-center space-x-2 cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="post_type" value="xe-tim-hang" class="text-blue-600">
-                            <span class="text-xs font-bold text-slate-700">🚛 Xe Tìm Hàng</span>
-                        </label>
-                    </div>
-                </div>
+        let walletBalance = 0;
+        let unlockedPosts = new Set();
+        let activeTab = 'all';
+        let selectedPostIdToUnlock = null;
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Điểm đi</label>
-                        <input type="text" id="post-from" required placeholder="VD: Đà Nẵng" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Điểm đến</label>
-                        <input type="text" id="post-to" required placeholder="VD: Hà Nội" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                </div>
+        let listings = [
+            { id: 1, type: 'hang-tim-xe', title: 'Nông Sản 🌾 (Cà phê bạt)', from: 'Đà Nẵng', to: 'Hà Nội', weight: '15 Tấn', price: 'Thỏa thuận', date: '12/08/2026 08:30', owner: 'Hồ Minh Tuấn', phone: '0905123456', note: 'Hàng đóng bao 50kg. Cần xe thùng bạt 3 chân bốc hàng đúng giờ.' },
+            { id: 2, type: 'xe-tim-hang', title: 'Xe Container 40ft rỗng 🚛', from: 'TP.HCM', to: 'Đà Nẵng', weight: 'Tải trọng 28 Tấn', price: 'Cước rẻ chiều về', date: '12/08/2026 07:15', owner: 'Trương Như Ý', phone: '0935888999', note: 'Xe trống xuất phát từ Bình Dương về Đà Nẵng tối nay.' }
+        ];
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tiêu đề bài đăng</label>
-                        <input type="text" id="post-title" required placeholder="VD: Nông Sản (Cà phê bạt)" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tải trọng / Khối lượng</label>
-                        <input type="text" id="post-weight" required placeholder="VD: 15 Tấn" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Mức giá đề xuất</label>
-                        <input type="text" id="post-price" required placeholder="VD: Thỏa thuận" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Số điện thoại liên hệ</label>
-                        <input type="text" id="post-phone" required placeholder="VD: 0905123456" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Ghi chú thêm</label>
-                    <textarea id="post-desc" rows="2" placeholder="Ghi chú về mặt hàng hoặc thời gian bốc hàng..." class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
-                </div>
-
-                <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition text-sm shadow-md">
-                    Đăng tin ngay
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT SYSTEM LOGIC -->
-  <script>
-    // 1. DÁN URL WEB APP MỚI CỦA BẠN VÀO ĐÂY (Lưu ý: URL phải có dạng https://script.google.com/macros/s/.../exec)
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqb4nPRFzegyFUHTKwXKhYhBV4ERxma59tTPF7F9QBqc-jIF256hxbM8ZLFT5nj8wC/exec"; 
-    const CURRENT_USER_ID = "U1001";
-
-    // APP STATE
-    let walletBalance = 0;
-    let unlockedPosts = new Set();
-    let activeTab = 'all';
-    let selectedPostIdToUnlock = null;
-
-    // MOCK DATA TIN ĐĂNG
-    let listings = [
-        {
-            id: 1,
-            type: 'hang-tim-xe',
-            title: 'Nông Sản 🌾 (Cà phê bạt)',
-            from: 'Đà Nẵng',
-            to: 'Hà Nội',
-            weight: '15 Tấn',
-            price: 'Thỏa thuận',
-            date: '12/08/2026 08:30',
-            owner: 'Hồ Minh Tuấn',
-            phone: '0905123456',
-            phoneMasked: '0905123456',
-            note: 'Hàng đóng bao 50kg. Cần xe thùng bạt 3 chân bốc hàng đúng giờ.'
-        },
-        {
-            id: 2,
-            type: 'xe-tim-hang',
-            title: 'Xe Container 40ft rỗng 🚛',
-            from: 'TP.HCM',
-            to: 'Đà Nẵng',
-            weight: 'Tải trọng 28 Tấn',
-            price: 'Cước rẻ chiều về',
-            date: '12/08/2026 07:15',
-            owner: 'Trương Như Ý',
-            phone: '0935888999',
-            phoneMasked: '0935888999',
-            note: 'Xe trống xuất phát từ Bình Dương về Đà Nẵng tối nay. Nhận ghép hàng.'
-        }
-    ];
-
-    // Khởi tạo
-    document.addEventListener('DOMContentLoaded', () => {
-        renderListings();
-        fetchBalanceFromSheet();
-    });
-
- // 1. ĐỌC SỐ DƯ & DANH SÁCH TIN ĐÃ MỞ TỪ GOOGLE SHEET KHI TẢI TRANG
-async function fetchUserDataFromSheet() {
-    document.getElementById('wallet-balance').innerText = "Đang tải...";
-    try {
-        const response = await fetch(`${GOOGLE_SCRIPT_URL}?userId=${CURRENT_USER_ID}`);
-        const result = await response.json();
-        if (result.status === "success") {
-            walletBalance = Number(result.balance);
-            
-            // Cập nhật danh sách ID tin đã mở từ Google Sheet vào Set Javascript
-            if (result.unlockedPosts && Array.isArray(result.unlockedPosts)) {
-                unlockedPosts = new Set(result.unlockedPosts.map(id => Number(id)));
-            }
-
-            updateWalletUI();
-            renderListings(); // Vẽ lại giao diện (các tin đã mở sẽ tự hiển thị SĐT)
-        }
-    } catch (error) {
-        console.error("Lỗi đồng bộ dữ liệu từ Sheet:", error);
-    }
-}
-
-// 2. MỞ KHÓA TIN MỚI & LƯU LẠI VÀO SHEET
-async function confirmUnlockPhone() {
-    if (!selectedPostIdToUnlock) return;
-
-    const btn = document.getElementById('btn-confirm-unlock');
-    btn.innerText = "Đang lưu vào Sheet...";
-    btn.disabled = true;
-
-    try {
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({
-                action: "UNLOCK",
-                userId: CURRENT_USER_ID,
-                amount: 20000,
-                postId: selectedPostIdToUnlock, // Gửi ID bài đăng
-                description: `Mở khóa SĐT bài đăng ID: ${selectedPostIdToUnlock}`
-            })
+        document.addEventListener('DOMContentLoaded', () => {
+            renderListings();
+            fetchUserDataFromSheet();
         });
 
-        const result = await response.json();
-
-        if (result.status === "success") {
-            walletBalance = Number(result.newBalance);
-            
-            // Cập nhật lại danh sách tin đã mở từ phản hồi của Sheet
-            if (result.unlockedPosts && Array.isArray(result.unlockedPosts)) {
-                unlockedPosts = new Set(result.unlockedPosts.map(id => Number(id)));
-            } else {
-                unlockedPosts.add(selectedPostIdToUnlock);
+        // 1. LẤY DỮ LIỆU TỪ GOOGLE SHEET
+        async function fetchUserDataFromSheet() {
+            document.getElementById('wallet-balance').innerText = "Đang tải...";
+            try {
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?userId=${CURRENT_USER_ID}`);
+                const result = await response.json();
+                if (result.status === "success") {
+                    walletBalance = Number(result.balance);
+                    if (result.unlockedPosts && Array.isArray(result.unlockedPosts)) {
+                        unlockedPosts = new Set(result.unlockedPosts.map(id => String(id)));
+                    }
+                    updateWalletUI();
+                    renderListings();
+                } else {
+                    alert("Lỗi từ hệ thống: " + result.message);
+                }
+            } catch (error) {
+                console.error("Lỗi:", error);
+                document.getElementById('wallet-balance').innerText = "Lỗi kết nối";
             }
-
-            updateWalletUI();
-            renderListings(); // Render lại giao diện
-            closeModal('modal-unlock');
-            selectedPostIdToUnlock = null;
-            alert("Mở khóa thành công! Thông tin bài đăng này đã được lưu vĩnh viễn cho tài khoản của bạn.");
-        } else {
-            alert(result.message || "Giao dịch thất bại!");
-        }
-    } catch (err) {
-        alert("Lỗi kết nối máy chủ Google Sheets!");
-    } finally {
-        btn.innerText = "Mở ngay (20k)";
-        btn.disabled = false;
-    }
-}
-
-// Gọi hàm đồng bộ khi vừa vào trang
-document.addEventListener('DOMContentLoaded', () => {
-    fetchUserDataFromSheet();
-});
-
-    // 2. MỞ KHÓA SỐ ĐIỆN THOẠI & TRỪ TIỀN SHEET (-20.000đ)
-    function requestUnlockPhone(postId) {
-        selectedPostIdToUnlock = postId;
-        if (walletBalance < 20000) {
-            alert('Số dư không đủ 20.000đ để mở khóa. Vui lòng nạp thêm tiền!');
-            openModal('modal-topup');
-            return;
         }
 
-        document.getElementById('unlock-current-balance').innerText = walletBalance.toLocaleString('vi-VN') + 'đ';
-        document.getElementById('unlock-remaining-balance').innerText = (walletBalance - 20000).toLocaleString('vi-VN') + 'đ';
-        openModal('modal-unlock');
-    }
+        // 2. MỞ KHÓA VÀ TRỪ TIỀN
+        function requestUnlockPhone(postId) {
+            selectedPostIdToUnlock = String(postId);
+            if (walletBalance < 20000) {
+                alert('Số dư ví không đủ 20.000đ!');
+                openModal('modal-topup');
+                return;
+            }
+            document.getElementById('unlock-current-balance').innerText = walletBalance.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('unlock-remaining-balance').innerText = (walletBalance - 20000).toLocaleString('vi-VN') + 'đ';
+            openModal('modal-unlock');
+        }
 
-    async function confirmUnlockPhone() {
-        if (!selectedPostIdToUnlock) return;
+        async function confirmUnlockPhone() {
+            if (!selectedPostIdToUnlock) return;
+            const btn = document.getElementById('btn-confirm-unlock');
+            btn.innerText = "Đang xử lý...";
+            btn.disabled = true;
 
-        const btn = document.getElementById('btn-confirm-unlock');
-        btn.innerText = "Đang trừ tiền Tài Khoản...";
-        btn.disabled = true;
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: "UNLOCK",
+                        userId: CURRENT_USER_ID,
+                        amount: 20000,
+                        postId: selectedPostIdToUnlock,
+                        description: `Mở khóa SĐT ID: ${selectedPostIdToUnlock}`
+                    })
+                });
 
-        try {
-            // Sử dụng Content-Type text/plain để tránh bị chặn CORS Preflight
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    action: "UNLOCK",
-                    userId: CURRENT_USER_ID,
-                    amount: 20000,
-                    description: `Mở khóa SĐT bài đăng ID: ${selectedPostIdToUnlock}`
-                })
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    walletBalance = Number(result.newBalance);
+                    if (result.unlockedPosts && Array.isArray(result.unlockedPosts)) {
+                        unlockedPosts = new Set(result.unlockedPosts.map(id => String(id)));
+                    } else {
+                        unlockedPosts.add(selectedPostIdToUnlock);
+                    }
+                    updateWalletUI();
+                    renderListings();
+                    closeModal('modal-unlock');
+                    selectedPostIdToUnlock = null;
+                    alert("Đã mở khóa vĩnh viễn tin đăng này!");
+                } else {
+                    alert(result.message || "Giao dịch thất bại!");
+                }
+            } catch (err) {
+                alert("Lỗi kết nối máy chủ!");
+            } finally {
+                btn.innerText = "Mở ngay (20k)";
+                btn.disabled = false;
+            }
+        }
+
+        // 3. NẠP TIỀN
+        function setTopupAmount(amount) { document.getElementById('topup-custom-amount').value = amount; }
+
+        async function executeTopup() {
+            const val = parseInt(document.getElementById('topup-custom-amount').value) || 50000;
+            const btn = document.getElementById('btn-confirm-topup');
+            btn.innerText = "Đang nạp...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: "TOPUP",
+                        userId: CURRENT_USER_ID,
+                        amount: val,
+                        description: `Nạp tiền ví`
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    walletBalance = Number(result.newBalance);
+                    updateWalletUI();
+                    alert(`Nạp thành công ${val.toLocaleString('vi-VN')}đ!`);
+                    closeModal('modal-topup');
+                } else {
+                    alert("Lỗi nạp tiền: " + result.message);
+                }
+            } catch (err) {
+                alert("Lỗi kết nối!");
+            } finally {
+                btn.innerText = "Xác nhận nạp ngay (Cộng tiền vào Tài khoản)";
+                btn.disabled = false;
+            }
+        }
+
+        // HÀM RENDER & HELPERS
+        function renderListings() {
+            const container = document.getElementById('listings-container');
+            container.innerHTML = '';
+
+            const filtered = listings.filter(item => (activeTab === 'all') || (item.type === activeTab));
+
+            document.getElementById('count-all').innerText = listings.length;
+            document.getElementById('count-hang').innerText = listings.filter(i => i.type === 'hang-tim-xe').length;
+            document.getElementById('count-xe').innerText = listings.filter(i => i.type === 'xe-tim-hang').length;
+
+            filtered.forEach(item => {
+                const isUnlocked = unlockedPosts.has(String(item.id));
+                const isHang = item.type === 'hang-tim-xe';
+
+                const cardHTML = `
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold px-2.5 py-1 rounded-full ${isHang ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">
+                                    ${isHang ? '📜 HÀNG TÌM XE' : '🚛 XE TÌM HÀNG'}
+                                </span>
+                                <span class="text-[11px] text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${item.date}</span>
+                            </div>
+
+                            <h3 class="font-bold text-slate-900 text-base mb-2">${item.title}</h3>
+
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-100 mb-3 flex items-center justify-between text-xs font-semibold">
+                                <span class="text-slate-700"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i>${item.from}</span>
+                                <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                                <span class="text-slate-700"><i class="fa-solid fa-location-dot text-green-500 mr-1"></i>${item.to}</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-xs text-slate-600 mb-3">
+                                <div><span class="text-slate-400">Tải trọng:</span> <strong>${item.weight}</strong></div>
+                                <div><span class="text-slate-400">Giá cước:</span> <strong class="text-emerald-600">${item.price}</strong></div>
+                            </div>
+
+                            <p class="text-xs text-slate-500 line-clamp-2 mb-4 italic">"${item.note}"</p>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-3 flex items-center justify-between">
+                            <div class="text-xs">
+                                <span class="block text-slate-400 text-[10px]">Liên hệ</span>
+                                <span class="font-bold text-slate-700">${item.owner}</span>
+                            </div>
+
+                            ${isUnlocked ? `
+                                <a href="tel:${item.phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-phone"></i> ${item.phone}
+                                </a>
+                            ` : `
+                                <button onclick="requestUnlockPhone(${item.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
+                                    <i class="fa-solid fa-phone"></i> <span>Mở khóa SĐT</span>
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
             });
-
-            const result = await response.json();
-
-            if (result.status === "success") {
-                walletBalance = Number(result.newBalance); // Cập nhật số dư mới từ Google Sheet
-                unlockedPosts.add(selectedPostIdToUnlock);
-                updateWalletUI();
-                renderListings();
-                closeModal('modal-unlock');
-                selectedPostIdToUnlock = null;
-                alert("Thành công! Đã trừ -20.000đ vào Tài khoản.");
-            } else {
-                alert(result.message || "Giao dịch thất bại!");
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Lỗi kết nối máy chủ hệ thống!");
-        } finally {
-            btn.innerText = "Mở ngay (20k)";
-            btn.disabled = false;
         }
-    }
 
-    // 3. NẠP TIỀN & CỘNG TIỀN SHEET (+VND)
-    function setTopupAmount(amount) {
-        document.getElementById('topup-custom-amount').value = amount;
-    }
+        function updateWalletUI() {
+            const formatted = walletBalance.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('wallet-balance').innerText = formatted;
+            document.getElementById('modal-current-balance').innerText = formatted;
+        }
 
-    async function executeTopup() {
-        const val = parseInt(document.getElementById('topup-custom-amount').value) || 50000;
-        const btn = document.getElementById('btn-confirm-topup');
-
-        btn.innerText = "Đang cộng tiền vào tài khoản...";
-        btn.disabled = true;
-
-        try {
-            // Sử dụng Content-Type text/plain để tránh bị chặn CORS Preflight
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    action: "TOPUP",
-                    userId: CURRENT_USER_ID,
-                    amount: val,
-                    description: `Nạp tiền tài khoản`
-                })
+        function filterListings(tab) {
+            activeTab = tab;
+            ['all', 'hang-tim-xe', 'xe-tim-hang'].forEach(t => {
+                const el = document.getElementById(t === 'all' ? 'tab-all' : (t === 'hang-tim-xe' ? 'tab-hang' : 'tab-xe'));
+                if (t === tab) {
+                    el.className = 'px-4 py-2 rounded-lg font-medium text-sm transition bg-blue-900 text-white';
+                } else {
+                    el.className = 'px-4 py-2 rounded-lg font-medium text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300';
+                }
             });
-
-            const result = await response.json();
-
-            if (result.status === "success") {
-                walletBalance = Number(result.newBalance); // Cập nhật số dư mới từ Google Sheet
-                updateWalletUI();
-                alert(`Nạp thành công ${val.toLocaleString('vi-VN')}đ! Số dư tài khoản đã cập nhật.`);
-                closeModal('modal-topup');
-            } else {
-                alert("Lỗi nạp tiền: " + result.message);
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Lỗi kết nối khi nạp tiền vào tài khoản!");
-        } finally {
-            btn.innerText = "Xác nhận nạp ngay (Cộng tiền vào tài khoản)";
-            btn.disabled = false;
+            renderListings();
         }
-    }
 
-    // GIAO DIỆN & RENDER
-    function renderListings() {
-        const container = document.getElementById('listings-container');
-        container.innerHTML = '';
-
-        const filtered = listings.filter(item => (activeTab === 'all') || (item.type === activeTab));
-
-        document.getElementById('count-all').innerText = listings.length;
-        document.getElementById('count-hang').innerText = listings.filter(i => i.type === 'hang-tim-xe').length;
-        document.getElementById('count-xe').innerText = listings.filter(i => i.type === 'xe-tim-hang').length;
-
-        filtered.forEach(item => {
-            const isUnlocked = unlockedPosts.has(item.id);
-            const isHang = item.type === 'hang-tim-xe';
-
-            const cardHTML = `
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-bold px-2.5 py-1 rounded-full ${isHang ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">
-                                ${isHang ? '📜 HÀNG TÌM XE' : '🚛 XE TÌM HÀNG'}
-                            </span>
-                            <span class="text-[11px] text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${item.date}</span>
-                        </div>
-
-                        <h3 class="font-bold text-slate-900 text-base mb-2">${item.title}</h3>
-
-                        <div class="bg-slate-50 p-2 rounded-xl border border-slate-100 mb-3 flex items-center justify-between text-xs font-semibold">
-                            <span class="text-slate-700"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i>${item.from}</span>
-                            <i class="fa-solid fa-arrow-right text-slate-400"></i>
-                            <span class="text-slate-700"><i class="fa-solid fa-location-dot text-green-500 mr-1"></i>${item.to}</span>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2 text-xs text-slate-600 mb-3">
-                            <div><span class="text-slate-400">Tải trọng:</span> <strong>${item.weight}</strong></div>
-                            <div><span class="text-slate-400">Giá cước:</span> <strong class="text-emerald-600">${item.price}</strong></div>
-                        </div>
-
-                        <p class="text-xs text-slate-500 line-clamp-2 mb-4 italic">"${item.note}"</p>
-                    </div>
-
-                    <div class="border-t border-slate-100 pt-3 flex items-center justify-between">
-                        <div class="text-xs">
-                            <span class="block text-slate-400 text-[10px]">Liên hệ</span>
-                            <span class="font-bold text-slate-700">${item.owner}</span>
-                        </div>
-
-                        ${isUnlocked ? `
-                            <a href="tel:${item.phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-2 rounded-xl transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-phone"></i> ${item.phone}
-                            </a>
-                        ` : `
-                            <button onclick="requestUnlockPhone(${item.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
-                                <i class="fa-solid fa-phone"></i> <span>Mở khóa SĐT</span>
-                            </button>
-                        `}
-                    </div>
-                </div>
-            `;
-            container.innerHTML += cardHTML;
-        });
-    }
-
-    function updateWalletUI() {
-        const formatted = walletBalance.toLocaleString('vi-VN') + 'đ';
-        document.getElementById('wallet-balance').innerText = formatted;
-        document.getElementById('modal-current-balance').innerText = formatted;
-    }
-
-    function filterListings(tab) {
-        activeTab = tab;
-        ['all', 'hang-tim-xe', 'xe-tim-hang'].forEach(t => {
-            const el = document.getElementById(t === 'all' ? 'tab-all' : (t === 'hang-tim-xe' ? 'tab-hang' : 'tab-xe'));
-            if (t === tab) {
-                el.className = 'px-4 py-2 rounded-lg font-medium text-sm transition bg-blue-900 text-white';
-            } else {
-                el.className = 'px-4 py-2 rounded-lg font-medium text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300';
-            }
-        });
-        renderListings();
-    }
-
-    function handleNewPost(e) {
-        e.preventDefault();
-        const type = document.querySelector('input[name="post_type"]:checked').value;
-        const from = document.getElementById('post-from').value;
-        const to = document.getElementById('post-to').value;
-        const title = document.getElementById('post-title').value;
-        const weight = document.getElementById('post-weight').value;
-        const price = document.getElementById('post-price').value;
-        const phone = document.getElementById('post-phone').value;
-        const desc = document.getElementById('post-desc').value;
-
-        const newPost = {
-            id: Date.now(),
-            type: type,
-            title: title,
-            from: from,
-            to: to,
-            weight: weight,
-            price: price,
-            date: 'Vừa xong',
-            owner: 'admin',
-            phone: phone,
-            phoneMasked: phone,
-            note: desc
-        };
-
-        listings.unshift(newPost);
-        unlockedPosts.add(newPost.id);
-        renderListings();
-        closeModal('modal-post');
-        document.getElementById('form-post').reset();
-        alert('Đăng tin thành công!');
-    }
-
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-</script>
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    </script>
+</body>
+</html>
