@@ -128,7 +128,7 @@
                 </h3>
                 <p class="text-xs text-blue-100 leading-relaxed">
                     Tên nhà xe/chủ hàng ẩn dạng <code class="bg-blue-950 px-1 rounded">***</code> và 5 số cuối SĐT ẩn dạng <code class="bg-blue-950 px-1 rounded">*****</code>. 
-                    Mở khóa liên hệ để đàm phán cước trực tiếp. Chi phí để xem thông tin số điện thoại và thông tin liên hệ là <strong>20.000đ / 1 lần</strong> (Đồng bộ trừ tiền trực tiếp trên Google Sheet).
+                    Mở khóa liên hệ để đàm phán cước trực tiếp. Chi phí để xem thông tin số điện thoại và thông tin liên hệ là <strong>20.000đ / 1 lần</strong> (Đồng bộ trừ tiền trực tiếp trên hệ thống).
                 </p>
             </div>
         </div>
@@ -406,13 +406,13 @@
                 renderListings();
                 closeModal('modal-unlock');
                 selectedPostIdToUnlock = null;
-                alert("Thành công! Đã trừ -20.000đ vào Google Sheet.");
+                alert("Thành công! Đã trừ -20.000đ vào Tài khoản.");
             } else {
                 alert(result.message || "Giao dịch thất bại!");
             }
         } catch (err) {
             console.error(err);
-            alert("Lỗi kết nối máy chủ Google Sheets!");
+            alert("Lỗi kết nối máy chủ hệ thống!");
         } finally {
             btn.innerText = "Mở ngay (20k)";
             btn.disabled = false;
@@ -428,7 +428,7 @@
         const val = parseInt(document.getElementById('topup-custom-amount').value) || 50000;
         const btn = document.getElementById('btn-confirm-topup');
 
-        btn.innerText = "Đang cộng tiền vào Sheet...";
+        btn.innerText = "Đang cộng tiền vào tài khoản...";
         btn.disabled = true;
 
         try {
@@ -451,16 +451,16 @@
             if (result.status === "success") {
                 walletBalance = Number(result.newBalance); // Cập nhật số dư mới từ Google Sheet
                 updateWalletUI();
-                alert(`Nạp thành công ${val.toLocaleString('vi-VN')}đ! Số dư trên Google Sheet đã cập nhật.`);
+                alert(`Nạp thành công ${val.toLocaleString('vi-VN')}đ! Số dư tài khoản đã cập nhật.`);
                 closeModal('modal-topup');
             } else {
                 alert("Lỗi nạp tiền: " + result.message);
             }
         } catch (err) {
             console.error(err);
-            alert("Lỗi kết nối khi nạp tiền vào Google Sheets!");
+            alert("Lỗi kết nối khi nạp tiền vào tài khoản!");
         } finally {
-            btn.innerText = "Xác nhận nạp ngay (Cộng tiền vào Sheet)";
+            btn.innerText = "Xác nhận nạp ngay (Cộng tiền vào tài khoản)";
             btn.disabled = false;
         }
     }
