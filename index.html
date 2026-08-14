@@ -50,24 +50,20 @@
                     <button onclick="openModal('modal-register')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold px-3 py-2 rounded-lg transition">Đăng Ký</button>
                 </div>
 
-                <!-- KHỐI ĐÃ ĐĂNG NHẬP (USER PROFILE DROPDOWN) -->
+                <!-- KHỐI ĐÃ ĐĂNG NHẬP -->
                 <div id="user-profile" class="hidden relative group cursor-pointer">
                     <button class="flex items-center space-x-2 border-l border-blue-800 pl-3">
-                        <div class="w-8 h-8 rounded-full bg-amber-500 text-slate-900 flex items-center justify-center font-bold text-xs border border-amber-300" id="user-avatar">
-                            U
-                        </div>
+                        <div class="w-8 h-8 rounded-full bg-amber-500 text-slate-900 flex items-center justify-center font-bold text-xs border border-amber-300" id="user-avatar">U</div>
                         <span class="hidden md:inline text-sm font-medium" id="user-display-name">Người dùng</span>
                         <i class="fa-solid fa-chevron-down text-xs text-blue-300"></i>
                     </button>
 
-                    <!-- DROPDOWN MENU -->
                     <div class="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-100 text-slate-800 hidden group-hover:block z-50 py-1">
                         <div class="px-4 py-2 border-b bg-slate-50">
                             <span class="block text-[10px] text-slate-400">Số điện thoại</span>
                             <span class="block text-xs font-bold text-slate-700" id="dropdown-user-phone">---</span>
                         </div>
                         
-                        <!-- NÚT ĐỔI MẬT KHẨU -->
                         <button onclick="openModal('modal-change-pass')" class="w-full text-left px-4 py-2.5 text-xs hover:bg-blue-50 text-slate-700 font-medium flex items-center gap-2">
                             <i class="fa-solid fa-key text-blue-600"></i> Đổi Mật Khẩu
                         </button>
@@ -105,7 +101,7 @@
             <div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-4 gap-2">
                 <div class="flex space-x-2">
                     <button id="tab-all" onclick="filterListings('all')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-900 text-white">Tất cả tin (<span id="count-all">0</span>)</button>
-                    <button id="tab-hang" onclick="filterListings('hang-tim-xe')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300">📦 Hàng Tìm Xe (<span id="count-hang">0</span>)</button>
+                    <button id="tab-hang" onclick="filterListings('hang-tim-xe')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300">📜 Hàng Tìm Xe (<span id="count-hang">0</span>)</button>
                     <button id="tab-xe" onclick="filterListings('xe-tim-hang')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300">🚛 Xe Tìm Hàng (<span id="count-xe">0</span>)</button>
                 </div>
                 <div class="text-xs text-slate-500">
@@ -134,7 +130,7 @@
 
     <!-- ==================== MODALS POPUPS ==================== -->
 
-    <!-- 1. MODAL ĐĂNG NHẬP -->
+    <!-- MODAL ĐĂNG NHẬP -->
     <div id="modal-login" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
             <button onclick="closeModal('modal-login')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -151,7 +147,7 @@
         </div>
     </div>
 
-    <!-- 2. MODAL ĐĂNG KÝ -->
+    <!-- MODAL ĐĂNG KÝ -->
     <div id="modal-register" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
             <button onclick="closeModal('modal-register')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -165,7 +161,7 @@
         </div>
     </div>
 
-    <!-- 3. MODAL QUÊN MẬT KHẨU -->
+    <!-- MODAL QUÊN MẬT KHẨU -->
     <div id="modal-forgot" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
             <button onclick="closeModal('modal-forgot')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -179,7 +175,7 @@
         </div>
     </div>
 
-    <!-- 4. MODAL ĐỔI MẬT KHẨU (CHO USER ĐÃ ĐĂNG NHẬP) -->
+    <!-- MODAL ĐỔI MẬT KHẨU -->
     <div id="modal-change-pass" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
             <button onclick="closeModal('modal-change-pass')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -210,7 +206,7 @@
         </div>
     </div>
 
-    <!-- 5. MODAL NẠP TIỀN -->
+    <!-- MODAL NẠP TIỀN -->
     <div id="modal-topup" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative mx-4">
             <button onclick="closeModal('modal-topup')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -235,15 +231,19 @@
         </div>
     </div>
 
-    <!-- 6. MODAL ĐĂNG TIN MỚI -->
+    <!-- MODAL ĐĂNG TIN MỚI (ĐÃ BỔ SUNG TRƯỜNG MỐC THỜI GIAN) -->
     <div id="modal-post" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative mx-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal('modal-post')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             <h2 class="text-xl font-bold mb-4 text-slate-900 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-blue-900"></i> Đăng Tin Vận Tải Mới</h2>
             <form onsubmit="handleCreatePost(event)" class="space-y-3">
                 <div class="grid grid-cols-2 gap-2">
-                    <label class="border p-2.5 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50"><input type="radio" name="post_type" value="hang-tim-xe" checked> <span class="text-xs font-bold">📦 Hàng Tìm Xe</span></label>
-                    <label class="border p-2.5 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50"><input type="radio" name="post_type" value="xe-tim-hang"> <span class="text-xs font-bold">🚛 Xe Tìm Hàng</span></label>
+                    <label class="border p-2.5 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50" onclick="togglePostTimeLabel('hang')">
+                        <input type="radio" name="post_type" value="hang-tim-xe" checked> <span class="text-xs font-bold">📜 Hàng Tìm Xe</span>
+                    </label>
+                    <label class="border p-2.5 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50" onclick="togglePostTimeLabel('xe')">
+                        <input type="radio" name="post_type" value="xe-tim-hang"> <span class="text-xs font-bold">🚛 Xe Tìm Hàng</span>
+                    </label>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <input type="text" id="post-from" required placeholder="Điểm đi (VD: Đà Nẵng)" class="border rounded-lg p-2 text-sm">
@@ -253,6 +253,13 @@
                     <input type="text" id="post-title" required placeholder="Tên hàng / Loại xe" class="border rounded-lg p-2 text-sm">
                     <input type="text" id="post-weight" required placeholder="Trọng tải / Tấn" class="border rounded-lg p-2 text-sm">
                 </div>
+                
+                <!-- TRƯỜNG THỜI GIAN XUẤT PHÁT / BỐC HÀNG -->
+                <div>
+                    <label id="lbl-time-title" class="block text-xs font-semibold text-slate-700 mb-1"><i class="fa-regular fa-calendar-check text-amber-500 mr-1"></i> Thời gian bốc hàng dự kiến</label>
+                    <input type="text" id="post-time" required placeholder="VD: 14/08/2026 08:00 hoặc Bốc hàng ngay" class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+
                 <input type="text" id="post-price" required placeholder="Giá cước đề xuất" class="w-full border rounded-lg p-2 text-sm">
                 <textarea id="post-note" placeholder="Ghi chú chi tiết về chuyến hàng/xe..." class="w-full border rounded-lg p-2 text-sm" rows="2"></textarea>
                 <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition text-sm shadow-md">Đăng Tin Ngay</button>
@@ -260,7 +267,7 @@
         </div>
     </div>
 
-    <!-- 7. MODAL QUẢN TRỊ ADMIN -->
+    <!-- MODAL QUẢN TRỊ ADMIN -->
     <div id="modal-admin" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative mx-4 max-h-[85vh] overflow-y-auto">
             <button onclick="closeModal('modal-admin')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -386,7 +393,7 @@
             } else { alert(res.message); }
         }
 
-        // 6. ĐỔI MẬT KHẨU (CHO USER ĐÃ ĐĂNG NHẬP)
+        // 6. ĐỔI MẬT KHẨU
         async function handleChangePass(e) {
             e.preventDefault();
             if (!currentUser || !currentUser.userId) {
@@ -449,6 +456,15 @@
             openModal('modal-post');
         }
 
+        function togglePostTimeLabel(type) {
+            const lbl = document.getElementById('lbl-time-title');
+            if (type === 'hang') {
+                lbl.innerHTML = `<i class="fa-regular fa-calendar-check text-amber-500 mr-1"></i> Thời gian bốc hàng dự kiến`;
+            } else {
+                lbl.innerHTML = `<i class="fa-solid fa-truck-moving text-blue-500 mr-1"></i> Thời gian xe xuất phát dự kiến`;
+            }
+        }
+
         async function handleCreatePost(e) {
             e.preventDefault();
             const type = document.querySelector('input[name="post_type"]:checked').value;
@@ -457,10 +473,11 @@
             const title = document.getElementById('post-title').value;
             const weight = document.getElementById('post-weight').value;
             const price = document.getElementById('post-price').value;
+            const time = document.getElementById('post-time').value;
             const note = document.getElementById('post-note').value;
 
             const res = await apiPost({
-                action: "CREATE_POST", type, from, to, title, weight, price, note,
+                action: "CREATE_POST", type, from, to, title, weight, price, time, note,
                 ownerPhone: currentUser.phone, ownerName: currentUser.fullName
             });
 
@@ -471,7 +488,7 @@
             }
         }
 
-        // 9. RENDER DANH SÁCH BÀI ĐĂNG
+        // 9. RENDER DANH SÁCH BÀI ĐĂNG (HIỂN THỊ MỐC THỜI GIAN)
         function renderListings() {
             const container = document.getElementById('listings-container');
             container.innerHTML = '';
@@ -487,19 +504,29 @@
                     <div class="bg-white rounded-2xl border p-5 flex flex-col justify-between shadow-sm">
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-bold px-2 py-0.5 rounded-full ${isHang ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">${isHang ? '📦 HÀNG TÌM XE' : '🚛 XE TÌM HÀNG'}</span>
+                                <span class="text-xs font-bold px-2 py-0.5 rounded-full ${isHang ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">${isHang ? '📜 HÀNG TÌM XE' : '🚛 XE TÌM HÀNG'}</span>
                                 <span class="text-[10px] text-slate-400">${item.date}</span>
                             </div>
+
                             <h3 class="font-bold text-slate-900 text-sm mb-2">${item.title}</h3>
+
                             <div class="bg-slate-50 p-2 rounded-xl text-xs font-semibold flex justify-between mb-2">
                                 <span>📍 ${item.from}</span> ➔ <span>📍 ${item.to}</span>
                             </div>
+
+                            <!-- MỐC THỜI GIAN CỦA XE CHẠY HOẶC HÀNG BỐC -->
+                            <div class="bg-amber-50/80 border border-amber-200/60 rounded-lg px-2.5 py-1.5 text-xs text-amber-900 mb-2 flex items-center gap-1.5">
+                                <i class="fa-regular fa-clock text-amber-600"></i>
+                                <span>${isHang ? 'Cần bốc hàng:' : 'Xe xuất phát:'} <strong>${item.time || 'Thỏa thuận'}</strong></span>
+                            </div>
+
                             <div class="grid grid-cols-2 text-xs text-slate-600 mb-2">
                                 <div>Tải: <strong>${item.weight}</strong></div>
                                 <div>Cước: <strong class="text-emerald-600">${item.price}</strong></div>
                             </div>
                             <p class="text-xs text-slate-500 italic line-clamp-2 mb-3">"${item.note}"</p>
                         </div>
+
                         <div class="border-t pt-3 flex items-center justify-between">
                             <span class="text-xs font-bold text-slate-700">${item.owner}</span>
                             ${isUnlocked ? `
