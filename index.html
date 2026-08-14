@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sàn Giao Dịch Vận Tải VANTAI247</title>
-    <!-- Tailwind CSS CDN -->
+    <title>VANTAI247 - Sàn Giao Dịch Vận Tải</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -15,380 +13,429 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- NAVIGATION HEADER -->
+    <!-- HEADER -->
     <header class="bg-blue-900 text-white sticky top-0 z-40 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="filterListings('all')">
-                <div class="bg-orange-500 p-2 rounded-lg text-white">
-                    <i class="fa-solid fa-truck-fast text-xl"></i>
-                </div>
+                <div class="bg-orange-500 p-2 rounded-lg"><i class="fa-solid fa-truck-fast text-xl"></i></div>
                 <div>
                     <span class="text-xl font-bold tracking-wide">VANTAI247</span>
                     <span class="block text-xs text-blue-200">Sàn Giao Dịch Vận Tải</span>
                 </div>
             </div>
 
-            <div class="flex items-center space-x-3 sm:space-x-5">
-                <div class="bg-blue-950/60 border border-blue-700/50 rounded-full px-3 py-1.5 flex items-center space-x-2">
+            <div class="flex items-center space-x-3">
+                <!-- VÍ TIỀN -->
+                <div id="wallet-box" class="hidden bg-blue-950/60 border border-blue-700/50 rounded-full px-3 py-1.5 flex items-center space-x-2">
                     <i class="fa-solid fa-wallet text-amber-400"></i>
                     <div class="text-xs">
-                        <span class="text-blue-300 block leading-none">Số dư ví</span>
-                        <span id="wallet-balance" class="font-bold text-sm text-amber-400">Đang tải...</span>
+                        <span class="text-blue-300 block leading-none">Số dư</span>
+                        <span id="wallet-balance" class="font-bold text-amber-400">0đ</span>
                     </div>
-                    <button onclick="openModal('modal-topup')" class="ml-2 bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold px-2.5 py-1 rounded-full transition">
-                        + Nạp
-                    </button>
+                    <button onclick="openModal('modal-topup')" class="ml-2 bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full">+ Nạp</button>
                 </div>
 
-                <button onclick="openModal('modal-post')" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow-sm transition flex items-center space-x-1.5">
-                    <i class="fa-solid fa-plus"></i>
-                    <span class="hidden sm:inline">Đăng tin</span>
+                <!-- ĐĂNG TIN -->
+                <button onclick="checkAuthAndOpenPost()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs sm:text-sm px-3 py-2 rounded-lg shadow transition flex items-center gap-1">
+                    <i class="fa-solid fa-plus"></i> Đăng tin
                 </button>
 
-                <div class="flex items-center space-x-2 border-l border-blue-800 pl-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center font-bold text-xs border border-blue-500">AD</div>
-                    <span class="hidden md:inline text-sm font-medium">admin</span>
+                <!-- KHỐI TÀI KHOẢN / ĐĂNG NHẬP -->
+                <div id="auth-buttons" class="flex items-center space-x-2">
+                    <button onclick="openModal('modal-login')" class="bg-blue-800 hover:bg-blue-700 text-xs px-3 py-2 rounded-lg font-medium">Đăng Nhập</button>
+                    <button onclick="openModal('modal-register')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold px-3 py-2 rounded-lg">Đăng Ký</button>
+                </div>
+
+                <div id="user-profile" class="hidden relative group">
+                    <button class="flex items-center space-x-2 border-l border-blue-800 pl-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center font-bold text-xs border border-blue-500" id="user-avatar">U</div>
+                        <span class="hidden md:inline text-sm font-medium" id="user-display-name">User</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-blue-300"></i>
+                    </button>
+                    <!-- DROPDOWN MENU -->
+                    <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 text-slate-800 hidden group-hover:block z-50">
+                        <button onclick="openModal('modal-change-pass')" class="w-full text-left px-4 py-2.5 text-xs hover:bg-slate-50 flex items-center gap-2"><i class="fa-solid fa-key"></i> Đổi Mật Khẩu</button>
+                        <button id="admin-panel-btn" onclick="openAdminPanel()" class="hidden w-full text-left px-4 py-2.5 text-xs hover:bg-slate-50 text-purple-700 font-bold flex items-center gap-2"><i class="fa-solid fa-user-shield"></i> Quản Trị Admin</button>
+                        <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-xs hover:bg-red-50 text-red-600 font-semibold flex items-center gap-2 border-t"><i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất</button>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- ADMIN STATUS BANNER -->
-    <div class="bg-purple-900 text-white py-2 px-4 shadow-inner">
-        <div class="max-w-7xl mx-auto flex items-center justify-between text-xs sm:text-sm">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-shield-halved text-amber-400"></i>
-                <span><strong>Đồng bộ Hệ Thống:</strong> Trừ tiền & Lưu trạng thái mở khóa theo User</span>
-            </div>
-            <button onclick="fetchUserDataFromSheet()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1 rounded-md text-xs">
-                <i class="fa-solid fa-rotate mr-1"></i> Tải lại số dư
-            </button>
-        </div>
-    </div>
-
     <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-6">
-            <div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-4 gap-2">
+            <div class="flex items-center justify-between border-b pb-4">
                 <div class="flex space-x-2">
-                    <button id="tab-all" onclick="filterListings('all')" class="px-4 py-2 rounded-lg font-medium text-sm transition bg-blue-900 text-white">
-                        Tất cả tin (<span id="count-all">0</span>)
-                    </button>
-                    <button id="tab-hang" onclick="filterListings('hang-tim-xe')" class="px-4 py-2 rounded-lg font-medium text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300">
-                        📦 Hàng Tìm Xe (<span id="count-hang">0</span>)
-                    </button>
-                    <button id="tab-xe" onclick="filterListings('xe-tim-hang')" class="px-4 py-2 rounded-lg font-medium text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300">
-                        🚛 Xe Tìm Hàng (<span id="count-xe">0</span>)
-                    </button>
-                </div>
-                <div class="text-xs text-slate-500">
-                    <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Phí mở khóa liên hệ: <span class="font-bold text-orange-600">20.000đ / lượt</span>
+                    <button id="tab-all" onclick="filterListings('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-900 text-white">Tất cả tin (<span id="count-all">0</span>)</button>
+                    <button id="tab-hang" onclick="filterListings('hang-tim-xe')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700">📦 Hàng Tìm Xe (<span id="count-hang">0</span>)</button>
+                    <button id="tab-xe" onclick="filterListings('xe-tim-hang')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700">🚛 Xe Tìm Hàng (<span id="count-xe">0</span>)</button>
                 </div>
             </div>
-
             <div id="listings-container" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
         </div>
 
         <div class="space-y-6">
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-chart-line text-blue-600"></i> Thống Kê Sàn Realtime
-                </h3>
+            <div class="bg-white p-5 rounded-2xl border shadow-sm">
+                <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-chart-line text-blue-600"></i> Thống Kê Realtime</h3>
                 <div class="grid grid-cols-2 gap-3 text-center">
-                    <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
-                        <span class="block text-xs text-blue-600 font-medium">Nhu cầu tìm xe</span>
-                        <span class="text-xl font-bold text-blue-900">1,240+</span>
-                    </div>
-                    <div class="bg-orange-50 p-3 rounded-xl border border-orange-100">
-                        <span class="block text-xs text-orange-600 font-medium">Chuyến xe rỗng</span>
-                        <span class="text-xl font-bold text-orange-900">850+</span>
-                    </div>
+                    <div class="bg-blue-50 p-3 rounded-xl border"><span class="block text-xs text-blue-600">Nhu cầu tìm xe</span><span class="text-xl font-bold text-blue-900">1,240+</span></div>
+                    <div class="bg-orange-50 p-3 rounded-xl border"><span class="block text-xs text-orange-600">Chuyến xe rỗng</span><span class="text-xl font-bold text-orange-900">850+</span></div>
                 </div>
-            </div>
-
-            <div class="bg-gradient-to-br from-blue-900 to-indigo-900 text-white p-6 rounded-2xl shadow-lg">
-                <h3 class="font-bold text-base mb-3 flex items-center gap-2 text-amber-400">
-                    <i class="fa-solid fa-shield-halved"></i> Bảo Mật Thông Tin 100%
-                </h3>
-                <p class="text-xs text-blue-100 leading-relaxed">
-                    Tên nhà xe/chủ hàng ẩn dạng <code class="bg-blue-950 px-1 rounded">***</code> và 5 số cuối SĐT ẩn dạng <code class="bg-blue-950 px-1 rounded">*****</code>. 
-                    Mở khóa liên hệ để đàm phán cước trực tiếp. Chi phí để xem thông tin số điện thoại là <strong>20.000đ / 1 lần</strong> (mở xem thông tin cho tài khoản).
-                </p>
             </div>
         </div>
     </main>
 
-    <!-- MODALS -->
-    <!-- 1. MODAL NẠP TIỀN -->
-    <div id="modal-topup" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative mx-4">
-            <button onclick="closeModal('modal-topup')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2"><i class="fa-solid fa-wallet text-amber-500"></i> Nạp tiền vào ví</h2>
-            <p class="text-xs text-slate-500 mb-5">Số dư khả dụng: <span class="font-bold text-blue-900" id="modal-current-balance">0đ</span></p>
+    <!-- ================= MODALS ================= -->
+    <!-- 1. MODAL ĐĂNG NHẬP -->
+    <div id="modal-login" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
+            <button onclick="closeModal('modal-login')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-4">Đăng Nhập</h2>
+            <form onsubmit="handleLogin(event)" class="space-y-3">
+                <input type="text" id="login-phone" required placeholder="Số điện thoại" class="w-full border rounded-lg p-2.5 text-sm">
+                <input type="password" id="login-pass" required placeholder="Mật khẩu" class="w-full border rounded-lg p-2.5 text-sm">
+                <div class="text-right"><button type="button" onclick="switchModal('modal-login', 'modal-forgot')" class="text-xs text-blue-600 font-medium">Quên mật khẩu?</button></div>
+                <button type="submit" id="btn-login" class="w-full bg-blue-900 text-white font-semibold py-2.5 rounded-xl text-sm">Đăng Nhập</button>
+            </form>
+            <p class="text-xs text-center mt-4 text-slate-500">Chưa có tài khoản? <button onclick="switchModal('modal-login', 'modal-register')" class="text-blue-600 font-bold">Đăng ký ngay</button></p>
+        </div>
+    </div>
 
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-2">Chọn nhanh số tiền nạp</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setTopupAmount(50000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50">50.000đ</button>
-                        <button onclick="setTopupAmount(100000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50">100.000đ</button>
-                        <button onclick="setTopupAmount(200000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50">200.000đ</button>
-                    </div>
+    <!-- 2. MODAL ĐĂNG KÝ -->
+    <div id="modal-register" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
+            <button onclick="closeModal('modal-register')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-4">Tạo Tài Khoản</h2>
+            <form onsubmit="handleRegister(event)" class="space-y-3">
+                <input type="text" id="reg-name" required placeholder="Họ và Tên" class="w-full border rounded-lg p-2.5 text-sm">
+                <input type="text" id="reg-phone" required placeholder="Số điện thoại" class="w-full border rounded-lg p-2.5 text-sm">
+                <input type="password" id="reg-pass" required placeholder="Mật khẩu" class="w-full border rounded-lg p-2.5 text-sm">
+                <button type="submit" id="btn-register" class="w-full bg-orange-500 text-white font-semibold py-2.5 rounded-xl text-sm">Đăng Ký Ngay</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. MODAL QUÊN MẬT KHẨU -->
+    <div id="modal-forgot" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
+            <button onclick="closeModal('modal-forgot')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-2">Đặt Lại Mật Khẩu</h2>
+            <form onsubmit="handleForgotPass(event)" class="space-y-3">
+                <input type="text" id="forgot-phone" required placeholder="Số điện thoại đăng ký" class="w-full border rounded-lg p-2.5 text-sm">
+                <input type="password" id="forgot-newpass" required placeholder="Mật khẩu mới" class="w-full border rounded-lg p-2.5 text-sm">
+                <button type="submit" class="w-full bg-blue-900 text-white font-semibold py-2.5 rounded-xl text-sm">Cập Nhật Mật Khẩu</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. MODAL ĐỔI MẬT KHẨU -->
+    <div id="modal-change-pass" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
+            <button onclick="closeModal('modal-change-pass')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-4">Đổi Mật Khẩu</h2>
+            <form onsubmit="handleChangePass(event)" class="space-y-3">
+                <input type="password" id="chg-oldpass" required placeholder="Mật khẩu hiện tại" class="w-full border rounded-lg p-2.5 text-sm">
+                <input type="password" id="chg-newpass" required placeholder="Mật khẩu mới" class="w-full border rounded-lg p-2.5 text-sm">
+                <button type="submit" class="w-full bg-blue-900 text-white font-semibold py-2.5 rounded-xl text-sm">Xác Nhận Đổi</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 5. MODAL ĐĂNG TIN MỚI -->
+    <div id="modal-post" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative mx-4 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-post')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-blue-900"></i> Đăng Tin Mới</h2>
+            <form onsubmit="handleCreatePost(event)" class="space-y-3">
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="border p-2 rounded-xl flex items-center gap-2"><input type="radio" name="post_type" value="hang-tim-xe" checked> <span class="text-xs font-bold">📦 Hàng Tìm Xe</span></label>
+                    <label class="border p-2 rounded-xl flex items-center gap-2"><input type="radio" name="post_type" value="xe-tim-hang"> <span class="text-xs font-bold">🚛 Xe Tìm Hàng</span></label>
                 </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Hoặc nhập số tiền khác (VNĐ)</label>
-                    <input type="number" id="topup-custom-amount" value="50000" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="post-from" required placeholder="Điểm đi (VD: Đà Nẵng)" class="border rounded-lg p-2 text-sm">
+                    <input type="text" id="post-to" required placeholder="Điểm đến (VD: Hà Nội)" class="border rounded-lg p-2 text-sm">
                 </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="post-title" required placeholder="Tên hàng / Loại xe" class="border rounded-lg p-2 text-sm">
+                    <input type="text" id="post-weight" required placeholder="Trọng tải / Tấn" class="border rounded-lg p-2 text-sm">
+                </div>
+                <input type="text" id="post-price" required placeholder="Giá cước đề xuất" class="w-full border rounded-lg p-2 text-sm">
+                <textarea id="post-note" placeholder="Ghi chú chi tiết..." class="w-full border rounded-lg p-2 text-sm"></textarea>
+                <button type="submit" class="w-full bg-orange-500 text-white font-semibold py-3 rounded-xl text-sm">Đăng Tin Ngay</button>
+            </form>
+        </div>
+    </div>
 
-                <button id="btn-confirm-topup" onclick="executeTopup()" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-xl transition text-sm">Xác nhận nạp ngay (Cộng tiền vào Tài khoản)</button>
+    <!-- 6. MODAL QUẢN TRỊ ADMIN -->
+    <div id="modal-admin" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative mx-4 max-h-[85vh] overflow-y-auto">
+            <button onclick="closeModal('modal-admin')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-4 text-purple-900 flex items-center gap-2"><i class="fa-solid fa-user-shield"></i> Bảng Quản Trị Hệ Thống</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-xs text-left">
+                    <thead class="bg-slate-100 font-bold border-b">
+                        <tr>
+                            <th class="p-2">UserID</th>
+                            <th class="p-2">Họ Tên</th>
+                            <th class="p-2">Số Điện Thoại</th>
+                            <th class="p-2">Số Dư Ví</th>
+                            <th class="p-2">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-user-list"></tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- 2. MODAL MỞ KHÓA -->
-    <div id="modal-unlock" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4 text-center">
-            <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-lock-open"></i></div>
-            <h3 class="text-lg font-bold text-slate-900 mb-1">Mở khóa Số Điện Thoại</h3>
-            <p class="text-xs text-slate-500 mb-4">Phí mở khóa liên hệ cho tin đăng này là <strong class="text-orange-600">20.000đ</strong>. Lần sau vào lại sẽ không mất phí nữa.</p>
-
-            <div class="bg-slate-50 p-3 rounded-lg mb-4 text-left text-xs space-y-1 border">
-                <div class="flex justify-between"><span class="text-slate-500">Số dư hiện tại:</span><span id="unlock-current-balance" class="font-semibold">0đ</span></div>
-                <div class="flex justify-between"><span class="text-slate-500">Phí mở khóa:</span><span class="font-semibold text-red-600">-20.000đ</span></div>
-                <div class="border-t pt-1 flex justify-between font-bold"><span>Còn lại:</span><span id="unlock-remaining-balance" class="text-blue-900">0đ</span></div>
-            </div>
-
-            <div class="flex space-x-2">
-                <button onclick="closeModal('modal-unlock')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 rounded-xl text-sm">Hủy bỏ</button>
-                <button id="btn-confirm-unlock" onclick="confirmUnlockPhone()" class="w-1/2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-xl text-sm shadow-sm">Mở ngay (20k)</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JS ENGINE -->
     <script>
-        // DÁN URL GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqb4nPRFzegyFUHTKwXKhYhBV4ERxma59tTPF7F9QBqc-jIF256hxbM8ZLFT5nj8wC/exec"; 
-        const CURRENT_USER_ID = "U1001";
-
-        let walletBalance = 0;
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqb4nPRFzegyFUHTKwXKhYhBV4ERxma59tTPF7F9QBqc-jIF256hxbM8ZLFT5nj8wC/exec";
+        
+        let currentUser = null;
+        let listings = [];
         let unlockedPosts = new Set();
         let activeTab = 'all';
-        let selectedPostIdToUnlock = null;
-
-        let listings = [
-            { id: 1, type: 'hang-tim-xe', title: 'Nông Sản 🌾 (Cà phê bạt)', from: 'Đà Nẵng', to: 'Hà Nội', weight: '15 Tấn', price: 'Thỏa thuận', date: '12/08/2026 08:30', owner: 'Hồ Minh Tuấn', phone: '0905123456', note: 'Hàng đóng bao 50kg. Cần xe thùng bạt 3 chân bốc hàng đúng giờ.' },
-            { id: 2, type: 'xe-tim-hang', title: 'Xe Container 40ft rỗng 🚛', from: 'TP.HCM', to: 'Đà Nẵng', weight: 'Tải trọng 28 Tấn', price: 'Cước rẻ chiều về', date: '12/08/2026 07:15', owner: 'Trương Như Ý', phone: '0935888999', note: 'Xe trống xuất phát từ Bình Dương về Đà Nẵng tối nay.' }
-        ];
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderListings();
-            fetchUserDataFromSheet();
+            const savedUser = localStorage.getItem('vantai247_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+            fetchInitialData();
         });
 
-        // 1. LẤY DỮ LIỆU TỪ GOOGLE SHEET
-        async function fetchUserDataFromSheet() {
-            document.getElementById('wallet-balance').innerText = "Đang tải...";
+        async function fetchInitialData() {
             try {
-                const response = await fetch(`${GOOGLE_SCRIPT_URL}?userId=${CURRENT_USER_ID}`);
+                const url = currentUser ? `${GOOGLE_SCRIPT_URL}?userId=${currentUser.userId}` : GOOGLE_SCRIPT_URL;
+                const response = await fetch(url);
                 const result = await response.json();
+                
                 if (result.status === "success") {
-                    walletBalance = Number(result.balance);
-                    if (result.unlockedPosts && Array.isArray(result.unlockedPosts)) {
-                        unlockedPosts = new Set(result.unlockedPosts.map(id => String(id)));
+                    listings = result.posts || [];
+                    if (result.user) {
+                        currentUser = result.user;
+                        localStorage.setItem('vantai247_user', JSON.stringify(currentUser));
+                        unlockedPosts = new Set(result.user.unlockedPosts.map(id => String(id)));
                     }
-                    updateWalletUI();
+                    updateAuthUI();
                     renderListings();
-                } else {
-                    alert("Lỗi từ hệ thống: " + result.message);
                 }
-            } catch (error) {
-                console.error("Lỗi:", error);
-                document.getElementById('wallet-balance').innerText = "Lỗi kết nối";
-            }
+            } catch (err) { console.error("Lỗi tải dữ liệu:", err); }
         }
 
-        // 2. MỞ KHÓA VÀ TRỪ TIỀN
-        function requestUnlockPhone(postId) {
-            selectedPostIdToUnlock = String(postId);
-            if (walletBalance < 20000) {
-                alert('Số dư ví không đủ 20.000đ!');
-                openModal('modal-topup');
-                return;
-            }
-            document.getElementById('unlock-current-balance').innerText = walletBalance.toLocaleString('vi-VN') + 'đ';
-            document.getElementById('unlock-remaining-balance').innerText = (walletBalance - 20000).toLocaleString('vi-VN') + 'đ';
-            openModal('modal-unlock');
-        }
+        function updateAuthUI() {
+            if (currentUser) {
+                document.getElementById('auth-buttons').classList.add('hidden');
+                document.getElementById('wallet-box').classList.remove('hidden');
+                document.getElementById('user-profile').classList.remove('hidden');
+                document.getElementById('wallet-balance').innerText = currentUser.balance.toLocaleString('vi-VN') + 'đ';
+                document.getElementById('user-display-name').innerText = currentUser.fullName;
+                document.getElementById('user-avatar').innerText = currentUser.fullName.charAt(0).toUpperCase();
 
-        async function confirmUnlockPhone() {
-            if (!selectedPostIdToUnlock) return;
-            const btn = document.getElementById('btn-confirm-unlock');
-            btn.innerText = "Đang xử lý...";
-            btn.disabled = true;
-
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: "UNLOCK",
-                        userId: CURRENT_USER_ID,
-                        amount: 20000,
-                        postId: selectedPostIdToUnlock,
-                        description: `Mở khóa SĐT ID: ${selectedPostIdToUnlock}`
-                    })
-                });
-
-                const result = await response.json();
-
-                if (result.status === "success") {
-                    walletBalance = Number(result.newBalance);
-                    if (result.unlockedPosts && Array.isArray(result.unlockedPosts)) {
-                        unlockedPosts = new Set(result.unlockedPosts.map(id => String(id)));
-                    } else {
-                        unlockedPosts.add(selectedPostIdToUnlock);
-                    }
-                    updateWalletUI();
-                    renderListings();
-                    closeModal('modal-unlock');
-                    selectedPostIdToUnlock = null;
-                    alert("Đã mở khóa xem thông tin đăng này!");
-                } else {
-                    alert(result.message || "Giao dịch thất bại!");
+                if (currentUser.role === 'admin') {
+                    document.getElementById('admin-panel-btn').classList.remove('hidden');
                 }
-            } catch (err) {
-                alert("Lỗi kết nối máy chủ!");
-            } finally {
-                btn.innerText = "Mở ngay (20k)";
-                btn.disabled = false;
+            } else {
+                document.getElementById('auth-buttons').classList.remove('hidden');
+                document.getElementById('wallet-box').classList.add('hidden');
+                document.getElementById('user-profile').classList.add('hidden');
             }
         }
 
-        // 3. NẠP TIỀN
-        function setTopupAmount(amount) { document.getElementById('topup-custom-amount').value = amount; }
+        // XỬ LÝ ĐĂNG NHẬP
+        async function handleLogin(e) {
+            e.preventDefault();
+            const phone = document.getElementById('login-phone').value;
+            const pass = document.getElementById('login-pass').value;
+            
+            const res = await apiPost({ action: "LOGIN", phone: phone, password: pass });
+            if (res.status === "success") {
+                currentUser = res.user;
+                localStorage.setItem('vantai247_user', JSON.stringify(currentUser));
+                unlockedPosts = new Set(currentUser.unlockedPosts.map(id => String(id)));
+                updateAuthUI();
+                closeModal('modal-login');
+                renderListings();
+                alert("Đăng nhập thành công!");
+            } else { alert(res.message); }
+        }
 
-        async function executeTopup() {
-            const val = parseInt(document.getElementById('topup-custom-amount').value) || 50000;
-            const btn = document.getElementById('btn-confirm-topup');
-            btn.innerText = "Đang nạp...";
-            btn.disabled = true;
+        // XỬ LÝ ĐĂNG KÝ
+        async function handleRegister(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const password = document.getElementById('reg-pass').value;
 
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: "TOPUP",
-                        userId: CURRENT_USER_ID,
-                        amount: val,
-                        description: `Nạp tiền ví`
-                    })
-                });
+            const res = await apiPost({ action: "REGISTER", fullName, phone, password });
+            if (res.status === "success") {
+                alert("Đăng ký thành công! Hãy đăng nhập ngay.");
+                switchModal('modal-register', 'modal-login');
+            } else { alert(res.message); }
+        }
 
-                const result = await response.json();
+        // XỬ LÝ QUÊN MẬT KHẨU
+        async function handleForgotPass(e) {
+            e.preventDefault();
+            const phone = document.getElementById('forgot-phone').value;
+            const newPassword = document.getElementById('forgot-newpass').value;
+            
+            const res = await apiPost({ action: "RESET_PASSWORD", phone, newPassword });
+            if (res.status === "success") {
+                alert(res.message);
+                switchModal('modal-forgot', 'modal-login');
+            } else { alert(res.message); }
+        }
 
-                if (result.status === "success") {
-                    walletBalance = Number(result.newBalance);
-                    updateWalletUI();
-                    alert(`Nạp thành công ${val.toLocaleString('vi-VN')}đ!`);
-                    closeModal('modal-topup');
-                } else {
-                    alert("Lỗi nạp tiền: " + result.message);
-                }
-            } catch (err) {
-                alert("Lỗi kết nối!");
-            } finally {
-                btn.innerText = "Xác nhận nạp ngay (Cộng tiền vào Tài khoản)";
-                btn.disabled = false;
+        // XỬ LÝ ĐỔI MẬT KHẨU
+        async function handleChangePass(e) {
+            e.preventDefault();
+            const oldPassword = document.getElementById('chg-oldpass').value;
+            const newPassword = document.getElementById('chg-newpass').value;
+
+            const res = await apiPost({ action: "CHANGE_PASSWORD", userId: currentUser.userId, oldPassword, newPassword });
+            if (res.status === "success") {
+                alert(res.message);
+                closeModal('modal-change-pass');
+            } else { alert(res.message); }
+        }
+
+        // ĐĂNG TIN MỚI
+        function checkAuthAndOpenPost() {
+            if (!currentUser) { alert("Vui lòng đăng nhập để đăng tin!"); openModal('modal-login'); return; }
+            openModal('modal-post');
+        }
+
+        async function handleCreatePost(e) {
+            e.preventDefault();
+            const type = document.querySelector('input[name="post_type"]:checked').value;
+            const from = document.getElementById('post-from').value;
+            const to = document.getElementById('post-to').value;
+            const title = document.getElementById('post-title').value;
+            const weight = document.getElementById('post-weight').value;
+            const price = document.getElementById('post-price').value;
+            const note = document.getElementById('post-note').value;
+
+            const res = await apiPost({
+                action: "CREATE_POST", type, from, to, title, weight, price, note,
+                ownerPhone: currentUser.phone, ownerName: currentUser.fullName
+            });
+
+            if (res.status === "success") {
+                alert("Đăng tin thành công!");
+                closeModal('modal-post');
+                fetchInitialData();
             }
         }
 
-        // HÀM RENDER & HELPERS
+        // RENDER DANH SÁCH BÀI ĐĂNG
         function renderListings() {
             const container = document.getElementById('listings-container');
             container.innerHTML = '';
 
             const filtered = listings.filter(item => (activeTab === 'all') || (item.type === activeTab));
-
             document.getElementById('count-all').innerText = listings.length;
-            document.getElementById('count-hang').innerText = listings.filter(i => i.type === 'hang-tim-xe').length;
-            document.getElementById('count-xe').innerText = listings.filter(i => i.type === 'xe-tim-hang').length;
 
             filtered.forEach(item => {
-                const isUnlocked = unlockedPosts.has(String(item.id));
+                const isUnlocked = unlockedPosts.has(String(item.id)) || (currentUser && currentUser.phone === item.phone);
                 const isHang = item.type === 'hang-tim-xe';
 
-                const cardHTML = `
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between">
+                container.innerHTML += `
+                    <div class="bg-white rounded-2xl border p-5 flex flex-col justify-between shadow-sm">
                         <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-xs font-bold px-2.5 py-1 rounded-full ${isHang ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">
-                                    ${isHang ? '📜 HÀNG TÌM XE' : '🚛 XE TÌM HÀNG'}
-                                </span>
-                                <span class="text-[11px] text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${item.date}</span>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold px-2 py-0.5 rounded-full ${isHang ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">${isHang ? '📦 HÀNG TÌM XE' : '🚛 XE TÌM HÀNG'}</span>
+                                <span class="text-[10px] text-slate-400">${item.date}</span>
                             </div>
-
-                            <h3 class="font-bold text-slate-900 text-base mb-2">${item.title}</h3>
-
-                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-100 mb-3 flex items-center justify-between text-xs font-semibold">
-                                <span class="text-slate-700"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i>${item.from}</span>
-                                <i class="fa-solid fa-arrow-right text-slate-400"></i>
-                                <span class="text-slate-700"><i class="fa-solid fa-location-dot text-green-500 mr-1"></i>${item.to}</span>
+                            <h3 class="font-bold text-slate-900 text-sm mb-2">${item.title}</h3>
+                            <div class="bg-slate-50 p-2 rounded-xl text-xs font-semibold flex justify-between mb-2">
+                                <span>📍 ${item.from}</span> ➔ <span>📍 ${item.to}</span>
                             </div>
-
-                            <div class="grid grid-cols-2 gap-2 text-xs text-slate-600 mb-3">
-                                <div><span class="text-slate-400">Tải trọng:</span> <strong>${item.weight}</strong></div>
-                                <div><span class="text-slate-400">Giá cước:</span> <strong class="text-emerald-600">${item.price}</strong></div>
+                            <div class="grid grid-cols-2 text-xs text-slate-600 mb-2">
+                                <div>Tải: <strong>${item.weight}</strong></div>
+                                <div>Cước: <strong class="text-emerald-600">${item.price}</strong></div>
                             </div>
-
-                            <p class="text-xs text-slate-500 line-clamp-2 mb-4 italic">"${item.note}"</p>
+                            <p class="text-xs text-slate-500 italic line-clamp-2 mb-3">"${item.note}"</p>
                         </div>
-
-                        <div class="border-t border-slate-100 pt-3 flex items-center justify-between">
-                            <div class="text-xs">
-                                <span class="block text-slate-400 text-[10px]">Liên hệ</span>
-                                <span class="font-bold text-slate-700">${item.owner}</span>
-                            </div>
-
+                        <div class="border-t pt-3 flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-700">${item.owner}</span>
                             ${isUnlocked ? `
-                                <a href="tel:${item.phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-2 rounded-xl transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-phone"></i> ${item.phone}
-                                </a>
+                                <a href="tel:${item.phone}" class="bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl"><i class="fa-solid fa-phone"></i> ${item.phone}</a>
                             ` : `
-                                <button onclick="requestUnlockPhone(${item.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
-                                    <i class="fa-solid fa-phone"></i> <span>Mở khóa SĐT</span>
-                                </button>
+                                <button onclick="requestUnlockPhone('${item.id}')" class="bg-emerald-600 text-white font-semibold text-xs px-3 py-1.5 rounded-xl">Mở khóa SĐT (20k)</button>
                             `}
                         </div>
                     </div>
                 `;
-                container.innerHTML += cardHTML;
             });
         }
 
-        function updateWalletUI() {
-            const formatted = walletBalance.toLocaleString('vi-VN') + 'đ';
-            document.getElementById('wallet-balance').innerText = formatted;
-            document.getElementById('modal-current-balance').innerText = formatted;
+        // MỞ KHÓA SĐT
+        async function requestUnlockPhone(postId) {
+            if (!currentUser) { alert("Vui lòng đăng nhập để mở khóa SĐT!"); openModal('modal-login'); return; }
+            if (currentUser.balance < 20000) { alert("Số dư không đủ! Vui lòng nạp thêm tiền."); openModal('modal-topup'); return; }
+
+            if (confirm("Xác nhận dùng 20.000đ để xem số điện thoại liên hệ này?")) {
+                const res = await apiPost({ action: "UNLOCK", userId: currentUser.userId, amount: 20000, postId: postId });
+                if (res.status === "success") {
+                    currentUser.balance = res.newBalance;
+                    unlockedPosts = new Set(res.unlockedPosts.map(id => String(id)));
+                    updateAuthUI();
+                    renderListings();
+                    alert("Đã mở khóa vĩnh viễn!");
+                } else { alert(res.message); }
+            }
         }
 
-        function filterListings(tab) {
-            activeTab = tab;
-            ['all', 'hang-tim-xe', 'xe-tim-hang'].forEach(t => {
-                const el = document.getElementById(t === 'all' ? 'tab-all' : (t === 'hang-tim-xe' ? 'tab-hang' : 'tab-xe'));
-                if (t === tab) {
-                    el.className = 'px-4 py-2 rounded-lg font-medium text-sm transition bg-blue-900 text-white';
-                } else {
-                    el.className = 'px-4 py-2 rounded-lg font-medium text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300';
-                }
+        // QUẢN TRỊ ADMIN
+        async function openAdminPanel() {
+            openModal('modal-admin');
+            const res = await fetch(`${GOOGLE_SCRIPT_URL}?userId=${currentUser.userId}`);
+            const data = await res.json();
+            const list = document.getElementById('admin-user-list');
+            list.innerHTML = '';
+            
+            (data.allUsers || []).forEach(u => {
+                list.innerHTML += `
+                    <tr class="border-b">
+                        <td class="p-2 font-mono">${u.userId}</td>
+                        <td class="p-2 font-bold">${u.fullName}</td>
+                        <td class="p-2">${u.phone}</td>
+                        <td class="p-2 text-emerald-600 font-bold">${u.balance.toLocaleString('vi-VN')}đ</td>
+                        <td class="p-2">
+                            <button onclick="adminEditBalance('${u.userId}', ${u.balance})" class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded text-[10px]">Sửa dư ví</button>
+                        </td>
+                    </tr>
+                `;
             });
-            renderListings();
         }
 
+        async function adminEditBalance(userId, currentBal) {
+            const newBal = prompt(`Nhập số dư ví mới cho User ${userId}:`, currentBal);
+            if (newBal !== null) {
+                const res = await apiPost({ action: "ADMIN_UPDATE_BALANCE", targetUserId: userId, newBalance: parseInt(newBal) });
+                if (res.status === "success") { alert(res.message); openAdminPanel(); }
+            }
+        }
+
+        // UTILS
+        async function apiPost(body) {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(body)
+            });
+            return await response.json();
+        }
+
+        function logout() { localStorage.removeItem('vantai247_user'); currentUser = null; location.reload(); }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function switchModal(from, to) { closeModal(from); openModal(to); }
+        function filterListings(tab) { activeTab = tab; renderListings(); }
     </script>
 </body>
 </html>
