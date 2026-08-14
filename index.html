@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VANTAI247 - Sàn Giao Dịch Vận Tải</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -13,106 +15,152 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- HEADER -->
+    <!-- NAVIGATION HEADER -->
     <header class="bg-blue-900 text-white sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="filterListings('all')">
-                <div class="bg-orange-500 p-2 rounded-lg"><i class="fa-solid fa-truck-fast text-xl"></i></div>
+                <div class="bg-orange-500 p-2 rounded-lg text-white">
+                    <i class="fa-solid fa-truck-fast text-xl"></i>
+                </div>
                 <div>
                     <span class="text-xl font-bold tracking-wide">VANTAI247</span>
                     <span class="block text-xs text-blue-200">Sàn Giao Dịch Vận Tải</span>
                 </div>
             </div>
 
-            <div class="flex items-center space-x-3">
-                <!-- VÍ TIỀN -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <!-- VÍ TÀI KHOẢN -->
                 <div id="wallet-box" class="hidden bg-blue-950/60 border border-blue-700/50 rounded-full px-3 py-1.5 flex items-center space-x-2">
                     <i class="fa-solid fa-wallet text-amber-400"></i>
                     <div class="text-xs">
                         <span class="text-blue-300 block leading-none">Số dư</span>
                         <span id="wallet-balance" class="font-bold text-amber-400">0đ</span>
                     </div>
-                    <button onclick="openModal('modal-topup')" class="ml-2 bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full">+ Nạp</button>
+                    <button onclick="openModal('modal-topup')" class="ml-2 bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full transition">+ Nạp</button>
                 </div>
 
-                <!-- ĐĂNG TIN -->
-                <button onclick="checkAuthAndOpenPost()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs sm:text-sm px-3 py-2 rounded-lg shadow transition flex items-center gap-1">
+                <!-- NÚT ĐĂNG TIN -->
+                <button onclick="checkAuthAndOpenPost()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-lg shadow transition flex items-center gap-1">
                     <i class="fa-solid fa-plus"></i> Đăng tin
                 </button>
 
-                <!-- KHỐI TÀI KHOẢN / ĐĂNG NHẬP -->
+                <!-- KHỐI CHƯA ĐĂNG NHẬP -->
                 <div id="auth-buttons" class="flex items-center space-x-2">
-                    <button onclick="openModal('modal-login')" class="bg-blue-800 hover:bg-blue-700 text-xs px-3 py-2 rounded-lg font-medium">Đăng Nhập</button>
-                    <button onclick="openModal('modal-register')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold px-3 py-2 rounded-lg">Đăng Ký</button>
+                    <button onclick="openModal('modal-login')" class="bg-blue-800 hover:bg-blue-700 text-xs px-3 py-2 rounded-lg font-medium transition">Đăng Nhập</button>
+                    <button onclick="openModal('modal-register')" class="bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold px-3 py-2 rounded-lg transition">Đăng Ký</button>
                 </div>
 
-                <div id="user-profile" class="hidden relative group">
+                <!-- KHỐI ĐÃ ĐĂNG NHẬP (USER PROFILE DROPDOWN) -->
+                <div id="user-profile" class="hidden relative group cursor-pointer">
                     <button class="flex items-center space-x-2 border-l border-blue-800 pl-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center font-bold text-xs border border-blue-500" id="user-avatar">U</div>
-                        <span class="hidden md:inline text-sm font-medium" id="user-display-name">User</span>
+                        <div class="w-8 h-8 rounded-full bg-amber-500 text-slate-900 flex items-center justify-center font-bold text-xs border border-amber-300" id="user-avatar">
+                            U
+                        </div>
+                        <span class="hidden md:inline text-sm font-medium" id="user-display-name">Người dùng</span>
                         <i class="fa-solid fa-chevron-down text-xs text-blue-300"></i>
                     </button>
+
                     <!-- DROPDOWN MENU -->
-                    <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 text-slate-800 hidden group-hover:block z-50">
-                        <button onclick="openModal('modal-change-pass')" class="w-full text-left px-4 py-2.5 text-xs hover:bg-slate-50 flex items-center gap-2"><i class="fa-solid fa-key"></i> Đổi Mật Khẩu</button>
-                        <button id="admin-panel-btn" onclick="openAdminPanel()" class="hidden w-full text-left px-4 py-2.5 text-xs hover:bg-slate-50 text-purple-700 font-bold flex items-center gap-2"><i class="fa-solid fa-user-shield"></i> Quản Trị Admin</button>
-                        <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-xs hover:bg-red-50 text-red-600 font-semibold flex items-center gap-2 border-t"><i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất</button>
+                    <div class="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-100 text-slate-800 hidden group-hover:block z-50 py-1">
+                        <div class="px-4 py-2 border-b bg-slate-50">
+                            <span class="block text-[10px] text-slate-400">Số điện thoại</span>
+                            <span class="block text-xs font-bold text-slate-700" id="dropdown-user-phone">---</span>
+                        </div>
+                        
+                        <!-- NÚT ĐỔI MẬT KHẨU -->
+                        <button onclick="openModal('modal-change-pass')" class="w-full text-left px-4 py-2.5 text-xs hover:bg-blue-50 text-slate-700 font-medium flex items-center gap-2">
+                            <i class="fa-solid fa-key text-blue-600"></i> Đổi Mật Khẩu
+                        </button>
+
+                        <button id="admin-panel-btn" onclick="openAdminPanel()" class="hidden w-full text-left px-4 py-2.5 text-xs hover:bg-purple-50 text-purple-700 font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-user-shield"></i> Trang Quản Trị
+                        </button>
+
+                        <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-xs hover:bg-red-50 text-red-600 font-semibold flex items-center gap-2 border-t mt-1">
+                            <i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- BANNER BẢO MẬT -->
+    <div class="bg-purple-900 text-white py-2 px-4 shadow-inner">
+        <div class="max-w-7xl mx-auto flex items-center justify-between text-xs sm:text-sm">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                <span><strong>VANTAI247:</strong> Sàn kết nối chính chủ - Mở khóa liên hệ xem vĩnh viễn</span>
+            </div>
+            <button onclick="fetchInitialData()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1 rounded-md text-xs">
+                <i class="fa-solid fa-rotate mr-1"></i> Tải lại số dư
+            </button>
+        </div>
+    </div>
+
     <!-- MAIN CONTENT -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- CỘT TIN ĐĂNG -->
         <div class="lg:col-span-2 space-y-6">
-            <div class="flex items-center justify-between border-b pb-4">
+            <div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-4 gap-2">
                 <div class="flex space-x-2">
-                    <button id="tab-all" onclick="filterListings('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-900 text-white">Tất cả tin (<span id="count-all">0</span>)</button>
-                    <button id="tab-hang" onclick="filterListings('hang-tim-xe')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700">📦 Hàng Tìm Xe (<span id="count-hang">0</span>)</button>
-                    <button id="tab-xe" onclick="filterListings('xe-tim-hang')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700">🚛 Xe Tìm Hàng (<span id="count-xe">0</span>)</button>
+                    <button id="tab-all" onclick="filterListings('all')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-900 text-white">Tất cả tin (<span id="count-all">0</span>)</button>
+                    <button id="tab-hang" onclick="filterListings('hang-tim-xe')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300">📦 Hàng Tìm Xe (<span id="count-hang">0</span>)</button>
+                    <button id="tab-xe" onclick="filterListings('xe-tim-hang')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300">🚛 Xe Tìm Hàng (<span id="count-xe">0</span>)</button>
+                </div>
+                <div class="text-xs text-slate-500">
+                    <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Phí xem SĐT: <span class="font-bold text-orange-600">20.000đ / lượt mở</span>
                 </div>
             </div>
+
             <div id="listings-container" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
         </div>
 
+        <!-- CỘT THỐNG KÊ -->
         <div class="space-y-6">
-            <div class="bg-white p-5 rounded-2xl border shadow-sm">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                 <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-chart-line text-blue-600"></i> Thống Kê Realtime</h3>
                 <div class="grid grid-cols-2 gap-3 text-center">
-                    <div class="bg-blue-50 p-3 rounded-xl border"><span class="block text-xs text-blue-600">Nhu cầu tìm xe</span><span class="text-xl font-bold text-blue-900">1,240+</span></div>
-                    <div class="bg-orange-50 p-3 rounded-xl border"><span class="block text-xs text-orange-600">Chuyến xe rỗng</span><span class="text-xl font-bold text-orange-900">850+</span></div>
+                    <div class="bg-blue-50 p-3 rounded-xl border border-blue-100"><span class="block text-xs text-blue-600">Nhu cầu tìm xe</span><span class="text-xl font-bold text-blue-900">1,240+</span></div>
+                    <div class="bg-orange-50 p-3 rounded-xl border border-orange-100"><span class="block text-xs text-orange-600">Chuyến xe rỗng</span><span class="text-xl font-bold text-orange-900">850+</span></div>
                 </div>
+            </div>
+            <div class="bg-gradient-to-br from-blue-900 to-indigo-900 text-white p-6 rounded-2xl shadow-lg">
+                <h3 class="font-bold text-base mb-2 text-amber-400"><i class="fa-solid fa-shield-halved mr-1"></i> Quyền Lợi Thành Viên</h3>
+                <p class="text-xs text-blue-100 leading-relaxed">Sau khi mở khóa SĐT bằng phí 20.000đ, tài khoản của bạn sẽ xem được thông tin liên hệ của tin đăng đó vĩnh viễn mỗi khi truy cập lại.</p>
             </div>
         </div>
     </main>
 
-    <!-- ================= MODALS ================= -->
+    <!-- ==================== MODALS POPUPS ==================== -->
+
     <!-- 1. MODAL ĐĂNG NHẬP -->
     <div id="modal-login" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
-            <button onclick="closeModal('modal-login')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl font-bold mb-4">Đăng Nhập</h2>
+            <button onclick="closeModal('modal-login')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-4 text-slate-900">Đăng Nhập</h2>
             <form onsubmit="handleLogin(event)" class="space-y-3">
-                <input type="text" id="login-phone" required placeholder="Số điện thoại" class="w-full border rounded-lg p-2.5 text-sm">
-                <input type="password" id="login-pass" required placeholder="Mật khẩu" class="w-full border rounded-lg p-2.5 text-sm">
-                <div class="text-right"><button type="button" onclick="switchModal('modal-login', 'modal-forgot')" class="text-xs text-blue-600 font-medium">Quên mật khẩu?</button></div>
-                <button type="submit" id="btn-login" class="w-full bg-blue-900 text-white font-semibold py-2.5 rounded-xl text-sm">Đăng Nhập</button>
+                <input type="text" id="login-phone" required placeholder="Số điện thoại" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <input type="password" id="login-pass" required placeholder="Mật khẩu" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <div class="text-right">
+                    <button type="button" onclick="switchModal('modal-login', 'modal-forgot')" class="text-xs text-blue-600 font-medium hover:underline">Quên mật khẩu?</button>
+                </div>
+                <button type="submit" id="btn-login" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-md">Đăng Nhập</button>
             </form>
-            <p class="text-xs text-center mt-4 text-slate-500">Chưa có tài khoản? <button onclick="switchModal('modal-login', 'modal-register')" class="text-blue-600 font-bold">Đăng ký ngay</button></p>
+            <p class="text-xs text-center mt-4 text-slate-500">Chưa có tài khoản? <button onclick="switchModal('modal-login', 'modal-register')" class="text-blue-600 font-bold hover:underline">Đăng ký ngay</button></p>
         </div>
     </div>
 
     <!-- 2. MODAL ĐĂNG KÝ -->
     <div id="modal-register" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
-            <button onclick="closeModal('modal-register')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl font-bold mb-4">Tạo Tài Khoản</h2>
+            <button onclick="closeModal('modal-register')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-4 text-slate-900">Đăng Ký Tài Khoản</h2>
             <form onsubmit="handleRegister(event)" class="space-y-3">
-                <input type="text" id="reg-name" required placeholder="Họ và Tên" class="w-full border rounded-lg p-2.5 text-sm">
-                <input type="text" id="reg-phone" required placeholder="Số điện thoại" class="w-full border rounded-lg p-2.5 text-sm">
-                <input type="password" id="reg-pass" required placeholder="Mật khẩu" class="w-full border rounded-lg p-2.5 text-sm">
-                <button type="submit" id="btn-register" class="w-full bg-orange-500 text-white font-semibold py-2.5 rounded-xl text-sm">Đăng Ký Ngay</button>
+                <input type="text" id="reg-name" required placeholder="Họ và Tên" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <input type="text" id="reg-phone" required placeholder="Số điện thoại" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <input type="password" id="reg-pass" required placeholder="Mật khẩu" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <button type="submit" id="btn-register" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-md">Xác Nhận Đăng Ký</button>
             </form>
         </div>
     </div>
@@ -120,38 +168,82 @@
     <!-- 3. MODAL QUÊN MẬT KHẨU -->
     <div id="modal-forgot" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
-            <button onclick="closeModal('modal-forgot')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl font-bold mb-2">Đặt Lại Mật Khẩu</h2>
+            <button onclick="closeModal('modal-forgot')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-1 text-slate-900">Đặt Lại Mật Khẩu</h2>
+            <p class="text-xs text-slate-500 mb-4">Nhập SĐT để thiết lập lại mật khẩu mới</p>
             <form onsubmit="handleForgotPass(event)" class="space-y-3">
-                <input type="text" id="forgot-phone" required placeholder="Số điện thoại đăng ký" class="w-full border rounded-lg p-2.5 text-sm">
-                <input type="password" id="forgot-newpass" required placeholder="Mật khẩu mới" class="w-full border rounded-lg p-2.5 text-sm">
-                <button type="submit" class="w-full bg-blue-900 text-white font-semibold py-2.5 rounded-xl text-sm">Cập Nhật Mật Khẩu</button>
+                <input type="text" id="forgot-phone" required placeholder="Số điện thoại đăng ký" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <input type="password" id="forgot-newpass" required placeholder="Mật khẩu mới" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-md">Cập Nhật Mật Khẩu</button>
             </form>
         </div>
     </div>
 
-    <!-- 4. MODAL ĐỔI MẬT KHẨU -->
+    <!-- 4. MODAL ĐỔI MẬT KHẨU (CHO USER ĐÃ ĐĂNG NHẬP) -->
     <div id="modal-change-pass" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative mx-4">
-            <button onclick="closeModal('modal-change-pass')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl font-bold mb-4">Đổi Mật Khẩu</h2>
+            <button onclick="closeModal('modal-change-pass')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-9 h-9 bg-blue-100 text-blue-900 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-slate-900">Đổi Mật Khẩu</h2>
+                    <p class="text-[11px] text-slate-500">Cập nhật mật khẩu mới cho tài khoản</p>
+                </div>
+            </div>
             <form onsubmit="handleChangePass(event)" class="space-y-3">
-                <input type="password" id="chg-oldpass" required placeholder="Mật khẩu hiện tại" class="w-full border rounded-lg p-2.5 text-sm">
-                <input type="password" id="chg-newpass" required placeholder="Mật khẩu mới" class="w-full border rounded-lg p-2.5 text-sm">
-                <button type="submit" class="w-full bg-blue-900 text-white font-semibold py-2.5 rounded-xl text-sm">Xác Nhận Đổi</button>
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Mật khẩu hiện tại</label>
+                    <input type="password" id="chg-oldpass" required placeholder="••••••••" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Mật khẩu mới</label>
+                    <input type="password" id="chg-newpass" required placeholder="••••••••" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Xác nhận mật khẩu mới</label>
+                    <input type="password" id="chg-confirmpass" required placeholder="••••••••" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <button type="submit" id="btn-submit-chgpass" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-md mt-2">Xác Nhận Đổi Mật Khẩu</button>
             </form>
         </div>
     </div>
 
-    <!-- 5. MODAL ĐĂNG TIN MỚI -->
+    <!-- 5. MODAL NẠP TIỀN -->
+    <div id="modal-topup" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative mx-4">
+            <button onclick="closeModal('modal-topup')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2"><i class="fa-solid fa-wallet text-amber-500"></i> Nạp tiền vào ví</h2>
+            <p class="text-xs text-slate-500 mb-4">Số dư khả dụng: <span class="font-bold text-blue-900" id="modal-current-balance">0đ</span></p>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-2">Chọn nhanh số tiền nạp</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setTopupAmount(50000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50">50.000đ</button>
+                        <button onclick="setTopupAmount(100000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50">100.000đ</button>
+                        <button onclick="setTopupAmount(200000)" class="border border-slate-200 rounded-lg p-2 text-sm font-semibold hover:border-blue-500 hover:bg-blue-50">200.000đ</button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Số tiền nạp (VNĐ)</label>
+                    <input type="number" id="topup-custom-amount" value="50000" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <button id="btn-confirm-topup" onclick="executeTopup()" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-xl transition text-sm">Xác Nhận Nạp Tiền</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. MODAL ĐĂNG TIN MỚI -->
     <div id="modal-post" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative mx-4 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeModal('modal-post')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-blue-900"></i> Đăng Tin Mới</h2>
+            <button onclick="closeModal('modal-post')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-4 text-slate-900 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-blue-900"></i> Đăng Tin Vận Tải Mới</h2>
             <form onsubmit="handleCreatePost(event)" class="space-y-3">
                 <div class="grid grid-cols-2 gap-2">
-                    <label class="border p-2 rounded-xl flex items-center gap-2"><input type="radio" name="post_type" value="hang-tim-xe" checked> <span class="text-xs font-bold">📦 Hàng Tìm Xe</span></label>
-                    <label class="border p-2 rounded-xl flex items-center gap-2"><input type="radio" name="post_type" value="xe-tim-hang"> <span class="text-xs font-bold">🚛 Xe Tìm Hàng</span></label>
+                    <label class="border p-2.5 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50"><input type="radio" name="post_type" value="hang-tim-xe" checked> <span class="text-xs font-bold">📦 Hàng Tìm Xe</span></label>
+                    <label class="border p-2.5 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-slate-50"><input type="radio" name="post_type" value="xe-tim-hang"> <span class="text-xs font-bold">🚛 Xe Tìm Hàng</span></label>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <input type="text" id="post-from" required placeholder="Điểm đi (VD: Đà Nẵng)" class="border rounded-lg p-2 text-sm">
@@ -162,17 +254,17 @@
                     <input type="text" id="post-weight" required placeholder="Trọng tải / Tấn" class="border rounded-lg p-2 text-sm">
                 </div>
                 <input type="text" id="post-price" required placeholder="Giá cước đề xuất" class="w-full border rounded-lg p-2 text-sm">
-                <textarea id="post-note" placeholder="Ghi chú chi tiết..." class="w-full border rounded-lg p-2 text-sm"></textarea>
-                <button type="submit" class="w-full bg-orange-500 text-white font-semibold py-3 rounded-xl text-sm">Đăng Tin Ngay</button>
+                <textarea id="post-note" placeholder="Ghi chú chi tiết về chuyến hàng/xe..." class="w-full border rounded-lg p-2 text-sm" rows="2"></textarea>
+                <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition text-sm shadow-md">Đăng Tin Ngay</button>
             </form>
         </div>
     </div>
 
-    <!-- 6. MODAL QUẢN TRỊ ADMIN -->
+    <!-- 7. MODAL QUẢN TRỊ ADMIN -->
     <div id="modal-admin" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative mx-4 max-h-[85vh] overflow-y-auto">
-            <button onclick="closeModal('modal-admin')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl font-bold mb-4 text-purple-900 flex items-center gap-2"><i class="fa-solid fa-user-shield"></i> Bảng Quản Trị Hệ Thống</h2>
+            <button onclick="closeModal('modal-admin')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-bold mb-4 text-purple-900 flex items-center gap-2"><i class="fa-solid fa-user-shield"></i> Quản Lý Tài Khoản Người Dùng</h2>
             <div class="overflow-x-auto">
                 <table class="w-full text-xs text-left">
                     <thead class="bg-slate-100 font-bold border-b">
@@ -190,7 +282,7 @@
         </div>
     </div>
 
-    <!-- JS ENGINE -->
+    <!-- JAVASCRIPT SYSTEM ENGINE -->
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqb4nPRFzegyFUHTKwXKhYhBV4ERxma59tTPF7F9QBqc-jIF256hxbM8ZLFT5nj8wC/exec";
         
@@ -207,6 +299,7 @@
             fetchInitialData();
         });
 
+        // 1. TẢI DỮ LIỆU BAN ĐẦU
         async function fetchInitialData() {
             try {
                 const url = currentUser ? `${GOOGLE_SCRIPT_URL}?userId=${currentUser.userId}` : GOOGLE_SCRIPT_URL;
@@ -226,13 +319,16 @@
             } catch (err) { console.error("Lỗi tải dữ liệu:", err); }
         }
 
+        // 2. CẬP NHẬT GIAO DIỆN TÀI KHOẢN
         function updateAuthUI() {
             if (currentUser) {
                 document.getElementById('auth-buttons').classList.add('hidden');
                 document.getElementById('wallet-box').classList.remove('hidden');
                 document.getElementById('user-profile').classList.remove('hidden');
                 document.getElementById('wallet-balance').innerText = currentUser.balance.toLocaleString('vi-VN') + 'đ';
+                document.getElementById('modal-current-balance').innerText = currentUser.balance.toLocaleString('vi-VN') + 'đ';
                 document.getElementById('user-display-name').innerText = currentUser.fullName;
+                document.getElementById('dropdown-user-phone').innerText = currentUser.phone;
                 document.getElementById('user-avatar').innerText = currentUser.fullName.charAt(0).toUpperCase();
 
                 if (currentUser.role === 'admin') {
@@ -245,7 +341,7 @@
             }
         }
 
-        // XỬ LÝ ĐĂNG NHẬP
+        // 3. ĐĂNG NHẬP
         async function handleLogin(e) {
             e.preventDefault();
             const phone = document.getElementById('login-phone').value;
@@ -263,7 +359,7 @@
             } else { alert(res.message); }
         }
 
-        // XỬ LÝ ĐĂNG KÝ
+        // 4. ĐĂNG KÝ
         async function handleRegister(e) {
             e.preventDefault();
             const fullName = document.getElementById('reg-name').value;
@@ -277,7 +373,7 @@
             } else { alert(res.message); }
         }
 
-        // XỬ LÝ QUÊN MẬT KHẨU
+        // 5. QUÊN MẬT KHẨU
         async function handleForgotPass(e) {
             e.preventDefault();
             const phone = document.getElementById('forgot-phone').value;
@@ -290,20 +386,64 @@
             } else { alert(res.message); }
         }
 
-        // XỬ LÝ ĐỔI MẬT KHẨU
+        // 6. ĐỔI MẬT KHẨU (CHO USER ĐÃ ĐĂNG NHẬP)
         async function handleChangePass(e) {
             e.preventDefault();
-            const oldPassword = document.getElementById('chg-oldpass').value;
-            const newPassword = document.getElementById('chg-newpass').value;
+            if (!currentUser || !currentUser.userId) {
+                alert("Phiên làm việc hết hạn. Vui lòng đăng nhập lại!");
+                openModal('modal-login');
+                return;
+            }
+
+            const oldPassword = document.getElementById('chg-oldpass').value.trim();
+            const newPassword = document.getElementById('chg-newpass').value.trim();
+            const confirmPassword = document.getElementById('chg-confirmpass').value.trim();
+
+            if (newPassword !== confirmPassword) {
+                alert("Mật khẩu mới và Nhập lại mật khẩu không khớp nhau!");
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit-chgpass');
+            btn.innerText = "Đang cập nhật...";
+            btn.disabled = true;
 
             const res = await apiPost({ action: "CHANGE_PASSWORD", userId: currentUser.userId, oldPassword, newPassword });
+            btn.innerText = "Xác Nhận Đổi Mật Khẩu";
+            btn.disabled = false;
+
             if (res.status === "success") {
                 alert(res.message);
                 closeModal('modal-change-pass');
+                document.getElementById('chg-oldpass').value = '';
+                document.getElementById('chg-newpass').value = '';
+                document.getElementById('chg-confirmpass').value = '';
             } else { alert(res.message); }
         }
 
-        // ĐĂNG TIN MỚI
+        // 7. NẠP TIỀN
+        function setTopupAmount(amount) { document.getElementById('topup-custom-amount').value = amount; }
+
+        async function executeTopup() {
+            if (!currentUser) { alert("Vui lòng đăng nhập để nạp tiền!"); openModal('modal-login'); return; }
+            const val = parseInt(document.getElementById('topup-custom-amount').value) || 50000;
+            const btn = document.getElementById('btn-confirm-topup');
+            btn.innerText = "Đang xử lý...";
+            btn.disabled = true;
+
+            const res = await apiPost({ action: "TOPUP", userId: currentUser.userId, amount: val });
+            btn.innerText = "Xác Nhận Nạp Tiền";
+            btn.disabled = false;
+
+            if (res.status === "success") {
+                currentUser.balance = res.newBalance;
+                updateAuthUI();
+                alert(`Nạp thành công ${val.toLocaleString('vi-VN')}đ!`);
+                closeModal('modal-topup');
+            } else { alert(res.message); }
+        }
+
+        // 8. ĐĂNG TIN MỚI
         function checkAuthAndOpenPost() {
             if (!currentUser) { alert("Vui lòng đăng nhập để đăng tin!"); openModal('modal-login'); return; }
             openModal('modal-post');
@@ -331,7 +471,7 @@
             }
         }
 
-        // RENDER DANH SÁCH BÀI ĐĂNG
+        // 9. RENDER DANH SÁCH BÀI ĐĂNG
         function renderListings() {
             const container = document.getElementById('listings-container');
             container.innerHTML = '';
@@ -373,24 +513,24 @@
             });
         }
 
-        // MỞ KHÓA SĐT
+        // 10. MỞ KHÓA SĐT
         async function requestUnlockPhone(postId) {
             if (!currentUser) { alert("Vui lòng đăng nhập để mở khóa SĐT!"); openModal('modal-login'); return; }
             if (currentUser.balance < 20000) { alert("Số dư không đủ! Vui lòng nạp thêm tiền."); openModal('modal-topup'); return; }
 
-            if (confirm("Xác nhận dùng 20.000đ để xem số điện thoại liên hệ này?")) {
+            if (confirm("Xác nhận dùng 20.000đ để mở khóa số điện thoại bài đăng này?")) {
                 const res = await apiPost({ action: "UNLOCK", userId: currentUser.userId, amount: 20000, postId: postId });
                 if (res.status === "success") {
                     currentUser.balance = res.newBalance;
                     unlockedPosts = new Set(res.unlockedPosts.map(id => String(id)));
                     updateAuthUI();
                     renderListings();
-                    alert("Đã mở khóa vĩnh viễn!");
+                    alert("Đã mở khóa xem thông tin bài đăng vĩnh viễn!");
                 } else { alert(res.message); }
             }
         }
 
-        // QUẢN TRỊ ADMIN
+        // 11. ADMIN PANEL
         async function openAdminPanel() {
             openModal('modal-admin');
             const res = await fetch(`${GOOGLE_SCRIPT_URL}?userId=${currentUser.userId}`);
